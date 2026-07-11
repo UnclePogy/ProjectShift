@@ -56,3 +56,19 @@ function findMatches() {
         ...findVerticalMatches()
     ];
 }
+
+function replaceMatches(matches) {
+    matches.forEach(([row, col]) => {
+        gameBoard[row][col] = Math.floor(Math.random() * COLORS.length);
+    });
+}
+
+function animateMatches(matches) {
+    matches.forEach(([row, col]) => {
+        const cell = document.querySelector(
+            `.cell[data-row="${row}"][data-col="${col}"]`
+        );
+
+        cell?.classList.add("cell--clearing");
+    });
+}

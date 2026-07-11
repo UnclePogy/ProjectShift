@@ -1,4 +1,8 @@
+let isResolvingMove = false;
+
 document.addEventListener("click", (e) => {
+
+    if (isResolvingMove) return;
 
     const cell = e.target;
 
@@ -17,5 +21,16 @@ document.addEventListener("click", (e) => {
 
     const matches = findMatches();
     console.log("Kombinace:", matches);
+
+    if (matches.length > 0) {
+        isResolvingMove = true;
+        animateMatches(matches);
+
+        setTimeout(() => {
+            replaceMatches(matches);
+            drawBoard(matches);
+            isResolvingMove = false;
+        }, 250);
+    }
 
 });

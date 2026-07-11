@@ -12,6 +12,18 @@ Překřížené kombinace zatím nesjednocujeme. Jejich chování ověříme př
 
 Stav: 🟡 čeká na test
 
+#016
+
+Řetězové kombinace zatím nevyhodnocujeme. Přidáme je až společně s gravitací kamenů, aby pro hráče působily přirozeně.
+
+Stav: 🟢 potvrzeno
+
+#017
+
+Animace vymazání kombinace a objevení nových kamenů je otestovaná. Délka animace je pro prototyp vyhovující.
+
+Stav: 🟢 potvrzeno
+
 #014
 
 Funkce findMatches() vrací všechny kameny z vodorovných i svislých kombinací. Výsledek byl ověřen v prohlížeči.

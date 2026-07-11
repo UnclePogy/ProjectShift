@@ -15,6 +15,7 @@ Další krok:
 - ověřena detekce vodorovných kombinací (3 a více stejných kamenů)
 - ověřena detekce svislých kombinací (3 a více stejných kamenů)
 - výsledky obou směrů jsou sjednoceny funkcí findMatches() a vypisují se do konzole prohlížeče
+- ověřena animace zmizení kombinace a objevení nových kamenů
 
 Další krok:
-- zajistit, aby se kámen patřící do obou směrů započítal jen jednou
+- navrhnout jednoduchý model gravitace kamenů

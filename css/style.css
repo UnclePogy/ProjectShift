@@ -4,3 +4,25 @@
     grid-template-rows: repeat(5, 70px);
     gap: 5px;
 }
+
+.cell--clearing {
+    animation: clear-tile 250ms ease-in forwards;
+}
+
+.cell--appearing {
+    animation: appear-tile 220ms ease-out;
+}
+
+@keyframes clear-tile {
+    to {
+        opacity: 0.1;
+        transform: scale(0.55);
+    }
+}
+
+@keyframes appear-tile {
+    from {
+        opacity: 0.1;
+        transform: scale(0.55);
+    }
+}

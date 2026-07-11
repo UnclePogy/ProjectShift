@@ -27,15 +27,21 @@ function createBoard() {
     }
 }
 
-function drawBoard() {
+function drawBoard(appearingMatches = []) {
     const board = document.getElementById("board");
     board.innerHTML = "";
+    const appearingCells = new Set(
+        appearingMatches.map(([row, col]) => `${row},${col}`)
+    );
 
     for (let row = 0; row < SIZE; row++) {
         for (let col = 0; col < SIZE; col++) {
             const cell = document.createElement("div");
 
             cell.className = "cell";
+            if (appearingCells.has(`${row},${col}`)) {
+                cell.classList.add("cell--appearing");
+            }
             cell.dataset.row = row;
             cell.dataset.col = col;
             cell.style.backgroundColor =
