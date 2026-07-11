@@ -57,10 +57,36 @@ function findMatches() {
     ];
 }
 
-function replaceMatches(matches) {
+function createRandomTile() {
+    return Math.floor(Math.random() * COLORS.length);
+}
+
+function clearMatches(matches) {
     matches.forEach(([row, col]) => {
-        gameBoard[row][col] = Math.floor(Math.random() * COLORS.length);
+        gameBoard[row][col] = null;
     });
+}
+
+function applyGravity() {
+    const newTiles = [];
+
+    for (let col = 0; col < SIZE; col++) {
+        let targetRow = SIZE - 1;
+
+        for (let row = SIZE - 1; row >= 0; row--) {
+            if (gameBoard[row][col] === null) continue;
+
+            gameBoard[targetRow][col] = gameBoard[row][col];
+            targetRow--;
+        }
+
+        for (let row = targetRow; row >= 0; row--) {
+            gameBoard[row][col] = createRandomTile();
+            newTiles.push([row, col]);
+        }
+    }
+
+    return newTiles;
 }
 
 function animateMatches(matches) {

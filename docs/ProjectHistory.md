@@ -16,6 +16,7 @@ Project Shift vzniká jako malá logická hra. Cílem je budovat funkční, rych
 - Vyhodnocujeme pouze kombinaci vzniklou hráčovým tahem. Nově doplněné kameny zatím řetězové kombinace nespouštějí.
 - Chování překřížených vodorovných a svislých kombinací ověříme až při vizuálním testu mazání kamenů.
 - Řetězové kombinace odložíme až na fázi s gravitací, aby jejich vznik nebyl jen náhodným přebarvením.
+- Po vymazání kombinace kameny padají v rámci každého sloupce dolů a nové kameny se doplňují shora.
 - Další mechaniky přidáváme po malých krocích, vždy s jasným účelem pro hráče.
 
 ## Vývojový způsob

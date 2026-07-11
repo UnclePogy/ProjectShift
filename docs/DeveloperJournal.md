@@ -16,6 +16,7 @@ Další krok:
 - ověřena detekce svislých kombinací (3 a více stejných kamenů)
 - výsledky obou směrů jsou sjednoceny funkcí findMatches() a vypisují se do konzole prohlížeče
 - ověřena animace zmizení kombinace a objevení nových kamenů
+- ověřena logika gravitace: kameny padají dolů a nové se doplňují shora
 
 Další krok:
-- navrhnout jednoduchý model gravitace kamenů
+- animovat pád kamenů
