@@ -6,6 +6,12 @@ Základní movement systém je uzavřen.
 
 Stav: 🟢 potvrzeno
 
+#013
+
+Detekce vodorovných i svislých kombinací je samostatně ověřena v prohlížeči.
+
+Stav: 🟢 potvrzeno
+
 #011
 
 Kameny z kombinace se pro první prototyp nahradí náhodnými novými barvami. Fyziku pádu zatím neřešíme.

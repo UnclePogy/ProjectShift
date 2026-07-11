@@ -23,3 +23,29 @@ function findHorizontalMatches() {
 
     return matches;
 }
+
+function findVerticalMatches() {
+    const matches = [];
+
+    for (let col = 0; col < SIZE; col++) {
+        let start = 0;
+
+        for (let row = 1; row <= SIZE; row++) {
+            const sameColor =
+                row < SIZE &&
+                gameBoard[row][col] === gameBoard[start][col];
+
+            if (sameColor) continue;
+
+            if (row - start >= 3) {
+                for (let matchRow = start; matchRow < row; matchRow++) {
+                    matches.push([matchRow, col]);
+                }
+            }
+
+            start = row;
+        }
+    }
+
+    return matches;
+}

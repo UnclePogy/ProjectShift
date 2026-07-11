@@ -16,6 +16,8 @@ document.addEventListener("click", (e) => {
     }
 
     const horizontalMatches = findHorizontalMatches();
+    const verticalMatches = findVerticalMatches();
     console.log("Vodorovné kombinace:", horizontalMatches);
+    console.log("Svislé kombinace:", verticalMatches);
 
 });
