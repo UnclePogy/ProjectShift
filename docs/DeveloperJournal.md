@@ -14,7 +14,7 @@ Stav:
 Další krok:
 - ověřena detekce vodorovných kombinací (3 a více stejných kamenů)
 - ověřena detekce svislých kombinací (3 a více stejných kamenů)
-- výsledek se po tahu vypisuje do konzole prohlížeče
+- výsledky obou směrů jsou sjednoceny funkcí findMatches() a vypisují se do konzole prohlížeče
 
 Další krok:
-- spojit výsledky obou směrů do jedné funkce findMatches()
+- zajistit, aby se kámen patřící do obou směrů započítal jen jednou

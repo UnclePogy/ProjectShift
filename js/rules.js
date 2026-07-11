@@ -49,3 +49,10 @@ function findVerticalMatches() {
 
     return matches;
 }
+
+function findMatches() {
+    return [
+        ...findHorizontalMatches(),
+        ...findVerticalMatches()
+    ];
+}
