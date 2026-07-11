@@ -15,4 +15,7 @@ document.addEventListener("click", (e) => {
         shiftRowRight(row);
     }
 
+    const horizontalMatches = findHorizontalMatches();
+    console.log("Vodorovné kombinace:", horizontalMatches);
+
 });

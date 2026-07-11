@@ -12,4 +12,8 @@ Stav:
 - připraveno na detekci kombinací
 
 Další krok:
-- implementace findMatches + mazání kombinací
+- ověřena detekce vodorovných kombinací (3 a více stejných kamenů)
+- výsledek se po tahu vypisuje do konzole prohlížeče
+
+Další krok:
+- doplnit detekci svislých kombinací
