@@ -28,9 +28,13 @@ document.addEventListener("click", (e) => {
 
         setTimeout(() => {
             clearMatches(matches);
-            const newTiles = applyGravity();
-            drawBoard(newTiles);
-            isResolvingMove = false;
+            const gravity = applyGravity();
+            drawBoard(gravity.newTiles);
+            animateGravity(gravity.fallingTiles);
+
+            setTimeout(() => {
+                isResolvingMove = false;
+            }, 220);
         }, 250);
     }
 

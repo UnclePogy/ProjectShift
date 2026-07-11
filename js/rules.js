@@ -69,6 +69,7 @@ function clearMatches(matches) {
 
 function applyGravity() {
     const newTiles = [];
+    const fallingTiles = [];
 
     for (let col = 0; col < SIZE; col++) {
         let targetRow = SIZE - 1;
@@ -77,6 +78,15 @@ function applyGravity() {
             if (gameBoard[row][col] === null) continue;
 
             gameBoard[targetRow][col] = gameBoard[row][col];
+
+            if (targetRow !== row) {
+                fallingTiles.push({
+                    row: targetRow,
+                    col,
+                    distance: targetRow - row
+                });
+            }
+
             targetRow--;
         }
 
@@ -86,7 +96,7 @@ function applyGravity() {
         }
     }
 
-    return newTiles;
+    return { newTiles, fallingTiles };
 }
 
 function animateMatches(matches) {
@@ -96,5 +106,16 @@ function animateMatches(matches) {
         );
 
         cell?.classList.add("cell--clearing");
+    });
+}
+
+function animateGravity(fallingTiles) {
+    fallingTiles.forEach(({ row, col, distance }) => {
+        const cell = document.querySelector(
+            `.cell[data-row="${row}"][data-col="${col}"]`
+        );
+
+        cell?.style.setProperty("--fall-offset", `-${distance * 75}px`);
+        cell?.classList.add("cell--falling");
     });
 }

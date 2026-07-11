@@ -17,6 +17,7 @@ Další krok:
 - výsledky obou směrů jsou sjednoceny funkcí findMatches() a vypisují se do konzole prohlížeče
 - ověřena animace zmizení kombinace a objevení nových kamenů
 - ověřena logika gravitace: kameny padají dolů a nové se doplňují shora
+- ověřena animace pádu kamenů
 
 Další krok:
-- animovat pád kamenů
+- rozhodnout pravidlo pro řetězové kombinace po doplnění kamenů

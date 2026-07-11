@@ -6,6 +6,12 @@ Základní movement systém je uzavřen.
 
 Stav: 🟢 potvrzeno
 
+#019
+
+Pád kamenů je animovaný krátkým plynulým pohybem. Rychlost je pro prototyp vyhovující.
+
+Stav: 🟢 potvrzeno
+
 #018
 
 Po vymazání kombinace kameny v každém sloupci padají dolů a nově vytvořené kameny vstupují shora.
