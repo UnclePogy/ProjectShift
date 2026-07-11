@@ -1,16 +1,38 @@
 let isResolvingMove = false;
 
+const activeTimeouts = new Set();
+
+function scheduleTimeout(callback, delay) {
+    const timeoutId = setTimeout(() => {
+        activeTimeouts.delete(timeoutId);
+        callback();
+    }, delay);
+
+    activeTimeouts.add(timeoutId);
+
+    return timeoutId;
+}
+
+function cancelActiveMove() {
+    activeTimeouts.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+    });
+
+    activeTimeouts.clear();
+    isResolvingMove = false;
+}
+
 function resolveMatches(matches) {
     console.log("Kombinace:", matches);
     animateMatches(matches);
 
-    setTimeout(() => {
+    scheduleTimeout(() => {
         clearMatches(matches);
         const gravity = applyGravity();
         drawBoard(gravity.newTiles);
         animateGravity(gravity.fallingTiles);
 
-        setTimeout(() => {
+        scheduleTimeout(() => {
             const nextMatches = findMatches();
 
             if (nextMatches.length > 0) {
