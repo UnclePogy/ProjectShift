@@ -6,15 +6,15 @@
 }
 
 .cell--clearing {
-    animation: clear-tile 250ms ease-in forwards;
+    animation: clear-tile 500ms ease-in forwards;
 }
 
 .cell--appearing {
-    animation: appear-tile 220ms ease-out;
+    animation: appear-tile 500ms ease-out;
 }
 
 .cell--falling {
-    animation: fall-tile 220ms ease-out;
+    animation: fall-tile 500ms ease-out;
 }
 
 @keyframes clear-tile {
