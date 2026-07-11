@@ -6,6 +6,12 @@ Základní movement systém je uzavřen.
 
 Stav: 🟢 potvrzeno
 
+#015
+
+Překřížené kombinace zatím nesjednocujeme. Jejich chování ověříme při vizuálním testu mazání kamenů a teprve potom potvrdíme finální pravidlo.
+
+Stav: 🟡 čeká na test
+
 #014
 
 Funkce findMatches() vrací všechny kameny z vodorovných i svislých kombinací. Výsledek byl ověřen v prohlížeči.
