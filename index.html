@@ -9,9 +9,39 @@
 </head>
 <body>
 
-    <h1>Project Shift v0.1.0</h1>
+    <h1>Project Shift v0.5.0</h1>
 
-    <div id="board"></div>
+    <main class="game-shell" aria-label="Herní prototyp">
+        <section class="players-panel" aria-label="Hráči, skóre a příchozí kameny">
+            <article id="player-panel-0" class="player-panel">
+                <div class="player-panel__header">
+                    <span class="player-panel__name">Hráč 1</span>
+                    <span id="player-turn-0" class="player-panel__turn">NA TAHU</span>
+                </div>
+                <div id="player-score-0" class="player-score" aria-label="Skóre hráče 1"></div>
+                <div id="player-queue-0" class="player-queue" aria-label="Další kameny hráče 1"></div>
+            </article>
+
+            <article id="player-panel-1" class="player-panel">
+                <div class="player-panel__header">
+                    <span class="player-panel__name">Hráč 2</span>
+                    <span id="player-turn-1" class="player-panel__turn">ČEKÁ</span>
+                </div>
+                <div id="player-score-1" class="player-score" aria-label="Skóre hráče 2"></div>
+                <div id="player-queue-1" class="player-queue" aria-label="Další kameny hráče 2"></div>
+            </article>
+        </section>
+
+        <div id="winner-message" class="winner-message" role="status" aria-live="polite" hidden></div>
+
+        <div id="top-controls" class="insertion-controls insertion-controls--top"></div>
+
+        <div class="board-row">
+            <div id="left-controls" class="insertion-controls insertion-controls--side"></div>
+            <div id="board" aria-label="Hrací deska"></div>
+            <div id="right-controls" class="insertion-controls insertion-controls--side"></div>
+        </div>
+    </main>
 
     <script src="js/board.js"></script>
     <script src="js/rules.js"></script>

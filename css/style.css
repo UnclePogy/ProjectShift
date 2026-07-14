@@ -1,33 +1,240 @@
+:root {
+    --board-size: 4;
+    --cell-size: clamp(38px, 11vw, 70px);
+    --board-gap: 5px;
+    --control-size: clamp(30px, 8vw, 42px);
+    --animation-duration: 500ms;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
-    box-sizing: border-box;
     padding: 16px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background: #1e1e1e;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    overscroll-behavior: none;
 }
 
+h1 {
+    margin: 0 0 16px;
+    font-size: clamp(22px, 6vw, 32px);
+}
+
+.game-shell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    touch-action: none;
+    user-select: none;
+}
+
+.players-panel {
+    width: min(100%, 620px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.player-panel {
+    min-width: 0;
+    padding: 9px 10px;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.045);
+    opacity: 0.62;
+    transition: opacity 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.player-panel--active {
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.player-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.player-panel__name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.player-panel__turn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+}
+
+.player-score {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-height: 18px;
+    margin-bottom: 8px;
+}
+
+.player-score[hidden] {
+    display: none;
+}
+
+.player-score__token {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.player-panel--active .player-score__token {
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.player-queue {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.player-queue__tile {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    opacity: 0.72;
+}
+
+.player-queue__tile--current {
+    opacity: 1;
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+
+.winner-message {
+    width: min(100%, 620px);
+    padding: 10px 14px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: clamp(16px, 4vw, 22px);
+    font-weight: 700;
+    text-align: center;
+}
+
+.board-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
 #board {
     display: grid;
-    grid-template-columns: repeat(5, 70px);
-    grid-template-rows: repeat(5, 70px);
-    gap: 5px;
+    grid-template-columns: repeat(var(--board-size), var(--cell-size));
+    grid-template-rows: repeat(var(--board-size), var(--cell-size));
+    gap: var(--board-gap);
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: outline-color 120ms ease, filter 120ms ease;
+}
+
+.cell--empty {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-style: dashed;
+}
+
+.cell--target {
+    outline: 3px solid rgba(255, 255, 255, 0.75);
+    outline-offset: -3px;
+    filter: brightness(1.12);
+}
+
+.insertion-controls {
+    display: grid;
+    gap: var(--board-gap);
+}
+
+.insertion-controls--top {
+    grid-template-columns: repeat(var(--board-size), var(--cell-size));
+    margin-left: calc(var(--control-size) + 16px);
+    margin-right: calc(var(--control-size) + 16px);
+}
+
+.insertion-controls--side {
+    grid-template-rows: repeat(var(--board-size), var(--cell-size));
+}
+
+.insertion-control {
+    width: var(--control-size);
+    height: var(--control-size);
+    align-self: center;
+    justify-self: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 50%;
+    color: #111;
+    font-size: clamp(16px, 4vw, 22px);
+    font-weight: 700;
+    cursor: grab;
+    touch-action: none;
+
+    transition: transform 80ms linear, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.insertion-control:active {
+    cursor: grabbing;
+}
+
+.insertion-control--dragging {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+}
+
+.insertion-control--ready {
+    border-color: #fff;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.28);
 }
 
 .cell--clearing {
-    animation: clear-tile 500ms ease-in forwards;
+    animation: clear-tile var(--animation-duration) ease-in forwards;
 }
 
 .cell--appearing {
-    animation: appear-tile 500ms ease-out;
+    animation: appear-tile var(--animation-duration) ease-out;
 }
 
 .cell--falling {
-    animation: fall-tile 500ms ease-out;
+    animation: fall-tile var(--animation-duration) ease-out;
 }
 
 @keyframes clear-tile {
@@ -50,7 +257,6 @@ body {
     }
 }
 
-
 .debug-panel {
     position: fixed;
     top: 16px;
@@ -60,6 +266,8 @@ body {
     flex-direction: column;
     gap: 10px;
 
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
     padding: 12px;
 
     background-color: rgba(20, 20, 20, 0.9);
@@ -73,22 +281,44 @@ body {
 
 .debug-panel__title {
     margin: 0;
-
     font-size: 14px;
     line-height: 1;
 }
 
+.debug-panel__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.debug-panel__select {
+    min-width: 76px;
+}
+
 .debug-panel__button {
     padding: 8px 12px;
-
     border: 1px solid #777;
     border-radius: 4px;
     background-color: #333;
     color: #fff;
-
     cursor: pointer;
 }
 
 .debug-panel__button:hover {
     background-color: #444;
+}
+
+@media (max-width: 620px) {
+    body {
+        justify-content: flex-start;
+    }
+
+    .debug-panel {
+        position: static;
+        width: min(100%, 420px);
+        margin-top: 16px;
+        order: 10;
+    }
 }

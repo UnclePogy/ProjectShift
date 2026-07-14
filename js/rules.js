@@ -1,64 +1,98 @@
-function findHorizontalMatches() {
-    const matches = [];
+function findHorizontalMatchGroups() {
+    const groups = [];
 
     for (let row = 0; row < SIZE; row++) {
         let start = 0;
 
         for (let col = 1; col <= SIZE; col++) {
+            const startValue = gameBoard[row][start];
             const sameColor =
+                startValue !== null &&
                 col < SIZE &&
-                gameBoard[row][col] === gameBoard[row][start];
+                gameBoard[row][col] === startValue;
 
             if (sameColor) continue;
 
-            if (col - start >= 3) {
+            if (startValue !== null && col - start >= 3) {
+                const cells = [];
+
                 for (let matchCol = start; matchCol < col; matchCol++) {
-                    matches.push([row, matchCol]);
+                    cells.push([row, matchCol]);
                 }
+
+                groups.push({
+                    direction: "horizontal",
+                    length: cells.length,
+                    cells
+                });
             }
 
             start = col;
         }
     }
 
-    return matches;
+    return groups;
 }
 
-function findVerticalMatches() {
-    const matches = [];
+function findVerticalMatchGroups() {
+    const groups = [];
 
     for (let col = 0; col < SIZE; col++) {
         let start = 0;
 
         for (let row = 1; row <= SIZE; row++) {
+            const startValue = gameBoard[start][col];
             const sameColor =
+                startValue !== null &&
                 row < SIZE &&
-                gameBoard[row][col] === gameBoard[start][col];
+                gameBoard[row][col] === startValue;
 
             if (sameColor) continue;
 
-            if (row - start >= 3) {
+            if (startValue !== null && row - start >= 3) {
+                const cells = [];
+
                 for (let matchRow = start; matchRow < row; matchRow++) {
-                    matches.push([matchRow, col]);
+                    cells.push([matchRow, col]);
                 }
+
+                groups.push({
+                    direction: "vertical",
+                    length: cells.length,
+                    cells
+                });
             }
 
             start = row;
         }
     }
 
-    return matches;
+    return groups;
 }
 
-function findMatches() {
+function findMatchGroups() {
     return [
-        ...findHorizontalMatches(),
-        ...findVerticalMatches()
+        ...findHorizontalMatchGroups(),
+        ...findVerticalMatchGroups()
     ];
 }
 
-function createRandomTile() {
-    return Math.floor(Math.random() * COLORS.length);
+function findMatches() {
+    const uniqueMatches = new Map();
+
+    findMatchGroups().forEach((group) => {
+        group.cells.forEach(([row, col]) => {
+            uniqueMatches.set(`${row},${col}`, [row, col]);
+        });
+    });
+
+    return [...uniqueMatches.values()];
+}
+
+function calculateMatchReward() {
+    return findMatchGroups().reduce((total, group) => {
+        return total + Math.max(1, group.length - 2);
+    }, 0);
 }
 
 function clearMatches(matches) {
@@ -68,16 +102,17 @@ function clearMatches(matches) {
 }
 
 function applyGravity() {
-    const newTiles = [];
     const fallingTiles = [];
 
     for (let col = 0; col < SIZE; col++) {
         let targetRow = SIZE - 1;
 
         for (let row = SIZE - 1; row >= 0; row--) {
-            if (gameBoard[row][col] === null) continue;
+            const tile = gameBoard[row][col];
 
-            gameBoard[targetRow][col] = gameBoard[row][col];
+            if (tile === null) continue;
+
+            gameBoard[targetRow][col] = tile;
 
             if (targetRow !== row) {
                 fallingTiles.push({
@@ -91,10 +126,9 @@ function applyGravity() {
         }
 
         for (let row = targetRow; row >= 0; row--) {
-            gameBoard[row][col] = createRandomTile();
-            newTiles.push([row, col]);
+            gameBoard[row][col] = null;
         }
     }
 
-    return { newTiles, fallingTiles };
+    return { fallingTiles };
 }

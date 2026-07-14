@@ -1,15 +1,31 @@
 console.log("BOARD LOADED");
-const SIZE = 5;
 
-const COLORS = [
+const AVAILABLE_COLORS = [
     "#ff595e",
     "#ffca3a",
     "#8ac926",
     "#1982c4",
-    "#6a4c93"
+    "#6a4c93",
+    "#00b4d8",
+    "#f15bb5"
 ];
 
+let SIZE = 4;
+let SYMBOL_COUNT = 5;
+let COLORS = AVAILABLE_COLORS.slice(0, SYMBOL_COUNT);
 let gameBoard = [];
+
+function setBoardConfiguration({ boardSize, symbolCount }) {
+    SIZE = boardSize;
+    SYMBOL_COUNT = symbolCount;
+    COLORS = AVAILABLE_COLORS.slice(0, SYMBOL_COUNT);
+
+    document.documentElement.style.setProperty("--board-size", SIZE);
+}
+
+function createRandomTile() {
+    return Math.floor(Math.random() * COLORS.length);
+}
 
 function createBoard() {
     gameBoard = [];
@@ -18,64 +34,99 @@ function createBoard() {
         const newRow = [];
 
         for (let col = 0; col < SIZE; col++) {
-            newRow.push(
-                Math.floor(Math.random() * COLORS.length)
-            );
+            newRow.push(createRandomTile());
         }
 
         gameBoard.push(newRow);
     }
 }
 
-function drawBoard(appearingMatches = []) {
+function drawBoard() {
     const board = document.getElementById("board");
     board.innerHTML = "";
-    const appearingCells = new Set(
-        appearingMatches.map(([row, col]) => `${row},${col}`)
-    );
 
     for (let row = 0; row < SIZE; row++) {
         for (let col = 0; col < SIZE; col++) {
             const cell = document.createElement("div");
+            const tileValue = gameBoard[row][col];
 
             cell.className = "cell";
-            if (appearingCells.has(`${row},${col}`)) {
-                cell.classList.add("cell--appearing");
-            }
             cell.dataset.row = row;
             cell.dataset.col = col;
-            cell.style.backgroundColor =
-                COLORS[gameBoard[row][col]];
+
+            if (tileValue === null) {
+                cell.classList.add("cell--empty");
+            } else {
+                cell.style.backgroundColor = COLORS[tileValue];
+            }
 
             board.appendChild(cell);
         }
     }
 }
 
-function shiftRowRight(rowIndex) {
-
+function insertRowFromLeft(rowIndex, tileValue) {
     const row = gameBoard[rowIndex];
+    const emptyIndex = row.indexOf(null);
+    let ejectedTile = null;
 
-    const last = row[row.length - 1];
+    if (emptyIndex === -1) {
+        ejectedTile = row[SIZE - 1];
 
-    for (let i = row.length - 1; i > 0; i--) {
-        row[i] = row[i - 1];
+        for (let col = SIZE - 1; col > 0; col--) {
+            row[col] = row[col - 1];
+        }
+    } else {
+        for (let col = emptyIndex; col > 0; col--) {
+            row[col] = row[col - 1];
+        }
     }
 
-    row[0] = last;
-
-    drawBoard();
+    row[0] = tileValue;
+    return ejectedTile;
 }
 
-function shiftColumnDown(colIndex) {
+function insertRowFromRight(rowIndex, tileValue) {
+    const row = gameBoard[rowIndex];
+    const emptyIndex = row.lastIndexOf(null);
+    let ejectedTile = null;
 
-    const last = gameBoard[SIZE - 1][colIndex];
+    if (emptyIndex === -1) {
+        ejectedTile = row[0];
 
-    for (let i = SIZE - 1; i > 0; i--) {
-        gameBoard[i][colIndex] = gameBoard[i - 1][colIndex];
+        for (let col = 0; col < SIZE - 1; col++) {
+            row[col] = row[col + 1];
+        }
+    } else {
+        for (let col = emptyIndex; col < SIZE - 1; col++) {
+            row[col] = row[col + 1];
+        }
     }
 
-    gameBoard[0][colIndex] = last;
+    row[SIZE - 1] = tileValue;
+    return ejectedTile;
+}
 
-    drawBoard();
+function insertColumnFromTop(colIndex, tileValue) {
+    let emptyRow = -1;
+    let ejectedTile = null;
+
+    for (let row = 0; row < SIZE; row++) {
+        if (gameBoard[row][colIndex] === null) {
+            emptyRow = row;
+            break;
+        }
+    }
+
+    if (emptyRow === -1) {
+        ejectedTile = gameBoard[SIZE - 1][colIndex];
+        emptyRow = SIZE - 1;
+    }
+
+    for (let row = emptyRow; row > 0; row--) {
+        gameBoard[row][colIndex] = gameBoard[row - 1][colIndex];
+    }
+
+    gameBoard[0][colIndex] = tileValue;
+    return ejectedTile;
 }
