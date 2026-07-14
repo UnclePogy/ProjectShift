@@ -1,45 +1,98 @@
-# Changelog
+# CHANGELOG
 
-## v0.5.0
+V tomto souboru jsou zaznamenány všechny významné změny projektu **Project Shift**.
 
-- Přidáno skóre reprezentované 14 přesouvatelnými ikonami, po 7 na každé straně.
-- Kombinace 3/4/5 převádí 1/2/3 ikony; započítávají se i kaskády.
+---
+
+## v0.5.0 — 15. 7. 2026
+
+### Přidáno
+
+- Skóre reprezentované 14 ikonami (7 pro každého hráče).
+- Kombinace 3 / 4 / 5 převádí 1 / 2 / 3 ikony.
+- Do skóre se započítávají i kaskády.
 - Po získání všech ikon se zobrazí vítěz bez automatického restartu.
-- Zobrazení skóre lze v Laboratoři okamžitě skrýt nebo zobrazit.
-- Příchozí kameny ve frontě mají stejnou velikost jako kameny na desce.
-- Laboratoř nově nabízí animace 100, 250, 500, 1000 a 1500 ms.
-- CSS animace používají stejnou délku jako herní časování.
+- Možnost skrýt nebo zobrazit skóre v Laboratoři.
+- Příchozí kameny mají stejnou velikost jako kameny na hrací ploše.
+- Nové rychlosti animací: 100 ms, 250 ms, 500 ms, 1000 ms a 1500 ms.
+- Herní logika i CSS používají jednotné časování animací.
 
-## v0.4.0
+---
 
-- Přidána Laboratoř v debug panelu.
-- Lze testovat desky 4×4, 5×5 a 6×6.
-- Lze měnit 4 až 7 typů kamenů.
-- Lze měnit délku fronty na 1, 3 nebo 5 kamenů.
-- Rychlost animací lze přepínat mezi 100, 250 a 500 ms.
-- Horní vkládání lze zapnout nebo vypnout během hry.
-- Změny rozměru, symbolů a fronty se použijí tlačítkem „Použít a resetovat“.
+## v0.4.0 — 14. 7. 2026
 
-## v0.3.2
+### Přidáno
 
-- Změněna hrací deska z 5×5 na 4×4.
-- Počet typů kamenů vrácen ze 7 na 5 kvůli lepší barevné čitelnosti.
-- Zachováno střídání hráčů, samostatné fronty a vkládání zleva, zprava a shora.
+- Laboratoř pro testování herních mechanik.
+- Přepínání velikosti hrací plochy (4×4, 5×5 a 6×6).
+- Přepínání počtu typů kamenů (4 až 7).
+- Přepínání délky fronty příchozích kamenů (1, 3 nebo 5).
+- Přepínání rychlosti animací.
+- Možnost zapnout nebo vypnout vkládání shora.
+- Tlačítko **Použít a resetovat**, které vytvoří novou hru podle aktuálního nastavení.
 
-Všechny významné změny projektu Project Shift budou zaznamenány v tomto souboru.
+---
 
-Formát vychází z principů Keep a Changelog.
+## v0.3.2 — 14. 7. 2026
 
-## [Unreleased]
+### Změněno
 
-### Added
+- Hrací plocha změněna z 5×5 na 4×4.
+- Počet typů kamenů vrácen ze 7 na 5 kvůli lepší přehlednosti.
+- Zachováno střídání hráčů, samostatné fronty i vkládání zleva, zprava a shora.
+
+---
+
+## v0.3.1 — 13. 7. 2026
+
+### Přidáno
 
 - Střídání dvou hráčů po dokončení celého tahu včetně kaskád.
 - Samostatná fronta tří viditelných příchozích kamenů pro každého hráče.
-- Zvýraznění aktivního hráče a aktuálního kamene.
+- Zvýraznění hráče na tahu.
+- Zvýraznění aktuálního příchozího kamene.
+- Barevné vstupní šipky podle aktuálního kamene hráče na tahu.
+- Debug reset obnovuje hrací plochu, aktivního hráče i obě fronty kamenů.
 
-### Changed
+### Změněno
 
-- Počet typů kamenů byl pro test zvýšen z 5 na 7.
-- Barva vstupních šipek se řídí aktuálním kamenem hráče na tahu.
-- Debug reset obnoví desku, aktivního hráče i obě fronty kamenů.
+- Pro experimentální testování byl počet typů kamenů zvýšen z 5 na 7.
+
+---
+
+## v0.3.0 — 13. 7. 2026
+
+### Přidáno
+
+- Nová mechanika vkládání kamenů zleva, zprava a shora.
+- Nahrazení rotace řádků a sloupců mechanikou vkládání.
+- Prázdná pole po odstranění kombinací zůstávají zachována.
+- Gravitace se aplikuje po každém tahu.
+- Automatické vyhodnocování kaskád až do jejich ukončení.
+
+---
+
+## v0.2.0 — 12. 7. 2026
+
+### Přidáno
+
+- Vyhledávání vodorovných a svislých kombinací.
+- Odstraňování nalezených kombinací.
+- Gravitace kamenů po odstranění kombinací.
+- Animace odstranění, objevení a pádu kamenů.
+- Debug panel pro testování.
+- Reset hrací plochy.
+
+---
+
+## v0.1.0 — 11. 7. 2026
+
+### Přidáno
+
+- Založení projektu Project Shift.
+- Základní struktura projektu.
+- Git a GitHub repozitář.
+- Hrací plocha 5×5.
+- Posun řádků.
+- Posun sloupců.
+- První dokumentace projektu (GDD, Roadmap, Constitution, README).
