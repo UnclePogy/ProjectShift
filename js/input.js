@@ -96,8 +96,11 @@ function createQueueTile(tileValue, index) {
     const tile = document.createElement("span");
 
     tile.className = "player-queue__tile";
-    tile.style.backgroundColor = COLORS[tileValue];
-    tile.setAttribute("aria-hidden", "true");
+    const tileDefinition = TILES[tileValue];
+    tile.style.backgroundColor = tileDefinition.color;
+    tile.style.color = tileDefinition.textColor;
+    tile.textContent = tileDefinition.symbol;
+    tile.setAttribute("aria-label", `Kámen ${tileValue + 1}`);
 
     if (index === 0) {
         tile.classList.add("player-queue__tile--current");
@@ -500,3 +503,9 @@ function preventGameGesture(event) {
 document.addEventListener("gesturestart", preventGameGesture, { passive: false });
 document.addEventListener("contextmenu", preventGameGesture);
 window.addEventListener("blur", cancelInsertionDrag);
+
+document.addEventListener("selectstart", (event) => {
+    if (activeDrag || event.target.closest?.(".game-shell, .debug-panel")) {
+        event.preventDefault();
+    }
+});

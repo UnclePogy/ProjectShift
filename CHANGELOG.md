@@ -122,3 +122,10 @@ V tomto souboru jsou zaznamenány všechny významné změny projektu **Project 
 - Posun řádků.
 - Posun sloupců.
 - První dokumentace projektu (GDD, Roadmap, Constitution, README).
+## v0.5.1-test
+
+- Laboratoř je připnutá ke spodní hraně obrazovky a na mobilu zůstává sbalitelná.
+- Během ovládání hry a laboratoře se již neoznačuje text.
+- Mazání kombinací a pády kamenů se spouštějí dávkově ve stejném animačním snímku.
+- Laboratoř umožňuje testovat 4 až 15 typů kamenů; výchozí test používá 15.
+- Kameny jsou odlišeny barvou i symbolem, protože samotná barva pro 15 typů nestačí.

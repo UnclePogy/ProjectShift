@@ -1,26 +1,34 @@
 console.log("BOARD LOADED");
 
-const AVAILABLE_COLORS = [
-    "#e63946", // červená
-    "#ffd166", // žlutá
-    "#43aa8b", // zelená
-    "#277da1", // modrá
-    "#7b2cbf", // fialová
-    "#f77f00", // oranžová
-    "#ff4d9d", // růžová
-    "#00b4d8", // tyrkysová
-    "#8d5524"  // hnědá
+const AVAILABLE_TILES = [
+    { color: "#e63946", symbol: "●", textColor: "#ffffff" },
+    { color: "#ffd166", symbol: "◆", textColor: "#1b1b1b" },
+    { color: "#43aa8b", symbol: "▲", textColor: "#ffffff" },
+    { color: "#277da1", symbol: "■", textColor: "#ffffff" },
+    { color: "#7b2cbf", symbol: "✦", textColor: "#ffffff" },
+    { color: "#f77f00", symbol: "✚", textColor: "#1b1b1b" },
+    { color: "#ff4d9d", symbol: "♥", textColor: "#ffffff" },
+    { color: "#00b4d8", symbol: "✿", textColor: "#102027" },
+    { color: "#8d5524", symbol: "⬟", textColor: "#ffffff" },
+    { color: "#b8de6f", symbol: "✕", textColor: "#17210d" },
+    { color: "#ff8fab", symbol: "⬢", textColor: "#2b1018" },
+    { color: "#4d908e", symbol: "☀", textColor: "#ffffff" },
+    { color: "#f9c74f", symbol: "☾", textColor: "#211a05" },
+    { color: "#577590", symbol: "★", textColor: "#ffffff" },
+    { color: "#c77dff", symbol: "⬥", textColor: "#22102f" }
 ];
 
 let SIZE = 4;
-let SYMBOL_COUNT = 9;
-let COLORS = AVAILABLE_COLORS.slice(0, SYMBOL_COUNT);
+let SYMBOL_COUNT = 15;
+let TILES = AVAILABLE_TILES.slice(0, SYMBOL_COUNT);
+let COLORS = TILES.map((tile) => tile.color);
 let gameBoard = [];
 
 function setBoardConfiguration({ boardSize, symbolCount }) {
     SIZE = boardSize;
     SYMBOL_COUNT = symbolCount;
-    COLORS = AVAILABLE_COLORS.slice(0, SYMBOL_COUNT);
+    TILES = AVAILABLE_TILES.slice(0, SYMBOL_COUNT);
+    COLORS = TILES.map((tile) => tile.color);
 
     document.documentElement.style.setProperty("--board-size", SIZE);
 }
@@ -87,7 +95,11 @@ function drawBoard() {
             if (tileValue === null) {
                 cell.classList.add("cell--empty");
             } else {
-                cell.style.backgroundColor = COLORS[tileValue];
+                const tileDefinition = TILES[tileValue];
+                cell.style.backgroundColor = tileDefinition.color;
+                cell.style.color = tileDefinition.textColor;
+                cell.textContent = tileDefinition.symbol;
+                cell.setAttribute("aria-label", `Kámen ${tileValue + 1}`);
             }
 
             board.appendChild(cell);

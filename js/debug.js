@@ -1,6 +1,6 @@
 const LAB_DEFAULTS = {
     boardSize: 4,
-    symbolCount: 9,
+    symbolCount: 15,
     queueSize: 2,
     animationDuration: 500,
     topInsertionEnabled: true,
@@ -91,7 +91,7 @@ function initDebugPanel() {
     content.className = "debug-panel__content";
 
     const boardSize = createSelect([4, 5, 6], LAB_DEFAULTS.boardSize);
-    const symbolCount = createSelect([4, 5, 6, 7, 8, 9], LAB_DEFAULTS.symbolCount);
+    const symbolCount = createSelect(Array.from({ length: 12 }, (_, index) => index + 4), LAB_DEFAULTS.symbolCount);
     const queueSize = createSelect([1, 2, 3, 5], LAB_DEFAULTS.queueSize);
     const animationDuration = createSelect(
         [100, 250, 500, 1000, 1500],

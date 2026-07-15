@@ -147,3 +147,7 @@ Stav: 🟡 testuje se
 Laboratoř umožňuje testovat délku animací 100, 250, 500, 1000 a 1500 ms. Změna rychlosti se aplikuje okamžitě na časování JavaScriptu i CSS animace.
 
 Stav: 🟡 testuje se
+
+## Testovací paleta až 15 typů kamenů
+
+Laboratoř umožňuje testovat 4 až 15 typů kamenů. Při vyšším počtu se kameny nerozlišují pouze barvou, ale také symbolem. Jde o testovací rozsah; finální počet bude určen podle četnosti kombinací, čitelnosti a tempa hry.
