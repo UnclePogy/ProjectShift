@@ -151,3 +151,10 @@ Stav: 🟡 testuje se
 ## Testovací paleta až 15 typů kamenů
 
 Laboratoř umožňuje testovat 4 až 15 typů kamenů. Při vyšším počtu se kameny nerozlišují pouze barvou, ale také symbolem. Jde o testovací rozsah; finální počet bude určen podle četnosti kombinací, čitelnosti a tempa hry.
+
+
+## Testovací varianty fronty a délky partie
+
+- Laboratoř umožňuje nastavit 1–15 počátečních bodů na hráče.
+- Fronta může být samostatná pro každého hráče nebo společná pro oba.
+- Obě možnosti jsou testovací; nejde zatím o finální pravidlo hry.

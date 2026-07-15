@@ -2,7 +2,10 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e1e1e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Project Shift</title>
 
     <link rel="stylesheet" href="css/style.css">
@@ -32,14 +35,17 @@
             </article>
         </section>
 
+        <section id="shared-queue-panel" class="shared-queue-panel" hidden aria-label="Společná fronta kamenů">
+            <span class="shared-queue-panel__label">SPOLEČNÁ FRONTA</span>
+            <div id="shared-queue" class="player-queue"></div>
+        </section>
+
+        <div id="turn-banner" class="turn-banner" data-player="1" role="status" aria-live="polite">NA TAHU: HRÁČ 1</div>
+
         <div id="winner-message" class="winner-message" role="status" aria-live="polite" hidden></div>
 
-        <div id="top-controls" class="insertion-controls insertion-controls--top"></div>
-
         <div class="board-row">
-            <div id="left-controls" class="insertion-controls insertion-controls--side"></div>
-            <div id="board" aria-label="Hrací deska"></div>
-            <div id="right-controls" class="insertion-controls insertion-controls--side"></div>
+            <div id="board" aria-label="Hrací deska. Tah začni na krajním kameni a táhni směrem dovnitř."></div>
         </div>
     </main>
 

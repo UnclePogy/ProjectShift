@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased — mobilní test 9 typů
+## Unreleased
+
+- Přidáno testovací nastavení počátečních bodů v rozsahu 1–15.
+- Přidána volitelná společná fronta kamenů pro oba hráče.
+- Přidán výrazný centrální indikátor hráče na tahu a zesílené zvýraznění aktivního panelu.
+- Přidáno tlačítko pro obnovení výchozího laboratorního nastavení. — mobilní test 9 typů
 
 ### Změněno
 
@@ -129,3 +134,8 @@ V tomto souboru jsou zaznamenány všechny významné změny projektu **Project 
 - Mazání kombinací a pády kamenů se spouštějí dávkově ve stejném animačním snímku.
 - Laboratoř umožňuje testovat 4 až 15 typů kamenů; výchozí test používá 15.
 - Kameny jsou odlišeny barvou i symbolem, protože samotná barva pro 15 typů nestačí.
+
+- Odstraněny samostatné šipky pro vkládání; tah se nyní provádí tažením krajního kamene směrem do desky.
+- Přidána testovací možnost vkládání odspodu.
+- Do Laboratoře přidána velikost fronty 100–200 %, velikost symbolů 100–200 % a nastavitelné rozestupy fronty.
+- Deska na mobilu využívá větší část dostupné šířky.

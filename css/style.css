@@ -510,3 +510,118 @@ body,
         max-width: calc(100% - 12px);
     }
 }
+
+/* Výrazná informace o tahu, aby ji hráč nemusel hledat v malém panelu. */
+.turn-banner {
+    width: min(100%, 620px);
+    padding: 8px 12px;
+    border: 2px solid rgba(255, 255, 255, 0.88);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: clamp(14px, 4vw, 20px);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-align: center;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.player-panel--active {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14), 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.player-panel__turn {
+    padding: 3px 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.player-panel--active .player-panel__turn {
+    background: #fff;
+    color: #111;
+    opacity: 1;
+}
+
+.shared-queue-panel {
+    width: min(100%, 360px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.shared-queue-panel[hidden] {
+    display: none;
+}
+
+.shared-queue-panel__label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.shared-queue-panel .player-queue {
+    overflow: visible;
+    padding: 0;
+}
+
+/* Testovací ovládání bez šipek: tažení začíná přímo na krajním kameni. */
+:root {
+    --queue-tile-scale: 1.1;
+    --symbol-scale: 1.2;
+    --queue-gap: 10px;
+}
+
+.board-row {
+    gap: 0;
+}
+
+#board {
+    touch-action: none;
+    cursor: grab;
+}
+
+#board:active {
+    cursor: grabbing;
+}
+
+.cell--drag-source {
+    outline: 3px solid rgba(255, 255, 255, 0.95);
+    outline-offset: -3px;
+    filter: brightness(1.18);
+}
+
+.player-queue {
+    gap: var(--queue-gap);
+}
+
+.player-queue__tile {
+    width: calc(var(--cell-size) * var(--queue-tile-scale));
+    height: calc(var(--cell-size) * var(--queue-tile-scale));
+}
+
+.cell,
+.player-queue__tile {
+    font-size: calc(clamp(17px, 5vw, 30px) * var(--symbol-scale));
+}
+
+@media (max-width: 620px) {
+    :root {
+        --cell-size: min(
+            calc((100vw - 20px - ((var(--board-size) - 1) * var(--board-gap))) / var(--board-size)),
+            72px
+        );
+    }
+
+    .game-shell {
+        width: 100%;
+    }
+
+    .board-row {
+        width: 100%;
+    }
+}

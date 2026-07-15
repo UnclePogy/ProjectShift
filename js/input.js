@@ -2,58 +2,69 @@ let isResolvingMove = false;
 let activeDrag = null;
 let activePlayerIndex = 0;
 let playerQueues = [];
+let sharedQueue = [];
 let playerScores = [];
 let gameOver = false;
 
 const PLAYER_COUNT = 2;
-const STARTING_SCORE = 7;
-const TOTAL_SCORE_TOKENS = STARTING_SCORE * PLAYER_COUNT;
+let STARTING_SCORE = 7;
+let TOTAL_SCORE_TOKENS = STARTING_SCORE * PLAYER_COUNT;
 let VISIBLE_QUEUE_SIZE = 2;
+let SHARED_QUEUE_ENABLED = false;
 let ANIMATION_DURATION = 500;
 let TOP_INSERTION_ENABLED = true;
+let BOTTOM_INSERTION_ENABLED = false;
 let SCORE_DISPLAY_ENABLED = true;
+let QUEUE_TILE_SCALE = 110;
+let SYMBOL_SCALE = 120;
+let QUEUE_GAP = 10;
 
 const DRAG_THRESHOLD = 24;
-const MAX_CONTROL_TRAVEL = 22;
 const activeTimeouts = new Set();
 
 function setInputConfiguration({
     queueSize,
     animationDuration,
     topInsertionEnabled,
-    scoreDisplayEnabled
+    bottomInsertionEnabled,
+    scoreDisplayEnabled,
+    startingScore,
+    sharedQueueEnabled,
+    queueTileScale,
+    symbolScale,
+    queueGap
 }) {
     VISIBLE_QUEUE_SIZE = queueSize;
     ANIMATION_DURATION = animationDuration;
     TOP_INSERTION_ENABLED = topInsertionEnabled;
+    BOTTOM_INSERTION_ENABLED = bottomInsertionEnabled;
     SCORE_DISPLAY_ENABLED = scoreDisplayEnabled;
+    STARTING_SCORE = startingScore;
+    TOTAL_SCORE_TOKENS = STARTING_SCORE * PLAYER_COUNT;
+    SHARED_QUEUE_ENABLED = sharedQueueEnabled;
+    QUEUE_TILE_SCALE = queueTileScale;
+    SYMBOL_SCALE = symbolScale;
+    QUEUE_GAP = queueGap;
 
-    document.documentElement.style.setProperty(
-        "--animation-duration",
-        `${ANIMATION_DURATION}ms`
-    );
+    document.documentElement.style.setProperty("--animation-duration", `${ANIMATION_DURATION}ms`);
+    document.documentElement.style.setProperty("--queue-tile-scale", String(QUEUE_TILE_SCALE / 100));
+    document.documentElement.style.setProperty("--symbol-scale", String(SYMBOL_SCALE / 100));
+    document.documentElement.style.setProperty("--queue-gap", `${QUEUE_GAP}px`);
 
-    updateTopInsertionVisibility();
     updateScoreVisibility();
 }
 
 function createPlayerQueue() {
-    return Array.from(
-        { length: VISIBLE_QUEUE_SIZE },
-        () => createRandomTile()
-    );
+    return Array.from({ length: VISIBLE_QUEUE_SIZE }, () => createRandomTile());
 }
 
 function resetPlayerState() {
     activePlayerIndex = 0;
-    playerQueues = Array.from(
-        { length: PLAYER_COUNT },
-        () => createPlayerQueue()
-    );
-    playerScores = Array.from(
-        { length: PLAYER_COUNT },
-        () => STARTING_SCORE
-    );
+    sharedQueue = createPlayerQueue();
+    playerQueues = SHARED_QUEUE_ENABLED
+        ? Array.from({ length: PLAYER_COUNT }, () => sharedQueue)
+        : Array.from({ length: PLAYER_COUNT }, () => createPlayerQueue());
+    playerScores = Array.from({ length: PLAYER_COUNT }, () => STARTING_SCORE);
     gameOver = false;
 
     hideWinnerMessage();
@@ -61,14 +72,18 @@ function resetPlayerState() {
 }
 
 function getCurrentIncomingTile() {
-    return playerQueues[activePlayerIndex][0];
+    const queue = SHARED_QUEUE_ENABLED ? sharedQueue : playerQueues[activePlayerIndex];
+    return queue[0];
 }
 
 function consumeCurrentTile() {
-    const queue = playerQueues[activePlayerIndex];
-
+    const queue = SHARED_QUEUE_ENABLED ? sharedQueue : playerQueues[activePlayerIndex];
     queue.shift();
     queue.push(createRandomTile());
+
+    if (SHARED_QUEUE_ENABLED) {
+        playerQueues = Array.from({ length: PLAYER_COUNT }, () => sharedQueue);
+    }
 }
 
 function scheduleTimeout(callback, delay) {
@@ -82,30 +97,24 @@ function scheduleTimeout(callback, delay) {
 }
 
 function cancelActiveMove() {
-    activeTimeouts.forEach((timeoutId) => {
-        clearTimeout(timeoutId);
-    });
-
+    activeTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
     activeTimeouts.clear();
-    cancelInsertionDrag();
+    cancelBoardDrag();
     clearTargetHighlight();
     isResolvingMove = false;
 }
 
 function createQueueTile(tileValue, index) {
     const tile = document.createElement("span");
+    const tileDefinition = TILES[tileValue];
 
     tile.className = "player-queue__tile";
-    const tileDefinition = TILES[tileValue];
     tile.style.backgroundColor = tileDefinition.color;
     tile.style.color = tileDefinition.textColor;
     tile.textContent = tileDefinition.symbol;
     tile.setAttribute("aria-label", `Kámen ${tileValue + 1}`);
 
-    if (index === 0) {
-        tile.classList.add("player-queue__tile--current");
-    }
-
+    if (index === 0) tile.classList.add("player-queue__tile--current");
     return tile;
 }
 
@@ -119,18 +128,11 @@ function createScoreToken() {
 function updateScoreDisplays() {
     playerScores.forEach((score, playerIndex) => {
         const scoreElement = document.getElementById(`player-score-${playerIndex}`);
-
         if (!scoreElement) return;
 
         scoreElement.innerHTML = "";
-        scoreElement.setAttribute(
-            "aria-label",
-            `Hráč ${playerIndex + 1} má ${score} ikon`
-        );
-
-        for (let index = 0; index < score; index++) {
-            scoreElement.appendChild(createScoreToken());
-        }
+        scoreElement.setAttribute("aria-label", `Hráč ${playerIndex + 1} má ${score} ikon`);
+        for (let index = 0; index < score; index++) scoreElement.appendChild(createScoreToken());
     });
 
     updateScoreVisibility();
@@ -150,36 +152,30 @@ function updatePlayerDisplays() {
         const isActive = playerIndex === activePlayerIndex && !gameOver;
 
         panel?.classList.toggle("player-panel--active", isActive);
-
-        if (turnElement) {
-            turnElement.textContent = gameOver
-                ? "KONEC"
-                : isActive
-                    ? "NA TAHU"
-                    : "ČEKÁ";
-        }
-
+        if (turnElement) turnElement.textContent = gameOver ? "KONEC" : isActive ? "NA TAHU" : "ČEKÁ";
         if (!queueElement) return;
 
+        queueElement.hidden = SHARED_QUEUE_ENABLED;
         queueElement.innerHTML = "";
-
-        queue.forEach((tileValue, index) => {
-            queueElement.appendChild(createQueueTile(tileValue, index));
-        });
+        if (!SHARED_QUEUE_ENABLED) queue.forEach((tileValue, index) => queueElement.appendChild(createQueueTile(tileValue, index)));
     });
 
+    const sharedQueuePanel = document.getElementById("shared-queue-panel");
+    const sharedQueueElement = document.getElementById("shared-queue");
+    if (sharedQueuePanel && sharedQueueElement) {
+        sharedQueuePanel.hidden = !SHARED_QUEUE_ENABLED;
+        sharedQueueElement.innerHTML = "";
+        if (SHARED_QUEUE_ENABLED) sharedQueue.forEach((tileValue, index) => sharedQueueElement.appendChild(createQueueTile(tileValue, index)));
+    }
+
+    const turnBanner = document.getElementById("turn-banner");
+    if (turnBanner) {
+        turnBanner.textContent = gameOver ? "HRA SKONČILA" : `NA TAHU: HRÁČ ${activePlayerIndex + 1}`;
+        turnBanner.dataset.player = String(activePlayerIndex + 1);
+    }
+
+    document.body.dataset.activePlayer = String(activePlayerIndex + 1);
     updateScoreDisplays();
-    updateInsertionControlColors();
-}
-
-function updateInsertionControlColors() {
-    if (gameOver || playerQueues.length === 0) return;
-
-    const incomingTile = getCurrentIncomingTile();
-
-    document.querySelectorAll(".insertion-control").forEach((control) => {
-        control.style.backgroundColor = COLORS[incomingTile];
-    });
 }
 
 function transferScoreToActivePlayer(amount) {
@@ -187,17 +183,8 @@ function transferScoreToActivePlayer(amount) {
 
     const opponentIndex = (activePlayerIndex + 1) % PLAYER_COUNT;
     const transferable = Math.min(amount, playerScores[opponentIndex]);
-
     playerScores[activePlayerIndex] += transferable;
     playerScores[opponentIndex] -= transferable;
-
-    console.log("Přesun ikon:", {
-        player: activePlayerIndex + 1,
-        requested: amount,
-        transferred: transferable,
-        scores: [...playerScores]
-    });
-
     updateScoreDisplays();
 
     if (playerScores[activePlayerIndex] >= TOTAL_SCORE_TOKENS) {
@@ -209,216 +196,161 @@ function transferScoreToActivePlayer(amount) {
 
 function showWinnerMessage(playerIndex) {
     const message = document.getElementById("winner-message");
-
     if (!message) return;
-
     message.textContent = `Hráč ${playerIndex + 1} vyhrál`;
     message.hidden = false;
 }
 
 function hideWinnerMessage() {
     const message = document.getElementById("winner-message");
-
     if (!message) return;
-
     message.textContent = "";
     message.hidden = true;
 }
 
-function createInsertionControl(direction, index) {
-    const control = document.createElement("button");
-
-    control.type = "button";
-    control.className = "insertion-control";
-    control.dataset.direction = direction;
-    control.dataset.index = index;
-
-    if (direction === "left") {
-        control.textContent = "→";
-        control.setAttribute("aria-label", `Vložit kámen zleva do řádku ${index + 1}`);
-    } else if (direction === "right") {
-        control.textContent = "←";
-        control.setAttribute("aria-label", `Vložit kámen zprava do řádku ${index + 1}`);
-    } else {
-        control.textContent = "↓";
-        control.setAttribute("aria-label", `Vložit kámen shora do sloupce ${index + 1}`);
-    }
-
-    control.addEventListener("pointerdown", startInsertionDrag);
-    control.addEventListener("pointermove", updateInsertionDrag);
-    control.addEventListener("pointerup", finishInsertionDrag);
-    control.addEventListener("pointercancel", cancelInsertionDrag);
-    control.addEventListener("lostpointercapture", cancelInsertionDrag);
-
-    return control;
-}
-
 function initInsertionControls() {
-    const leftControls = document.getElementById("left-controls");
-    const rightControls = document.getElementById("right-controls");
-    const topControls = document.getElementById("top-controls");
+    const board = document.getElementById("board");
+    if (!board) return;
 
-    leftControls.innerHTML = "";
-    rightControls.innerHTML = "";
-    topControls.innerHTML = "";
-
-    for (let index = 0; index < SIZE; index++) {
-        leftControls.appendChild(createInsertionControl("left", index));
-        rightControls.appendChild(createInsertionControl("right", index));
-        topControls.appendChild(createInsertionControl("top", index));
-    }
-
-    updateTopInsertionVisibility();
+    board.removeEventListener("pointerdown", startBoardDrag);
+    board.addEventListener("pointerdown", startBoardDrag);
     updatePlayerDisplays();
 }
 
-function updateTopInsertionVisibility() {
-    const topControls = document.getElementById("top-controls");
-
-    if (!topControls) return;
-
-    topControls.hidden = !TOP_INSERTION_ENABLED;
+function getCandidateDirections(row, col) {
+    const candidates = [];
+    if (col === 0) candidates.push("left");
+    if (col === SIZE - 1) candidates.push("right");
+    if (row === 0 && TOP_INSERTION_ENABLED) candidates.push("top");
+    if (row === SIZE - 1 && BOTTOM_INSERTION_ENABLED) candidates.push("bottom");
+    return candidates;
 }
 
-function getInwardDistance(event, drag) {
-    const deltaX = event.clientX - drag.startX;
-    const deltaY = event.clientY - drag.startY;
-
-    if (drag.direction === "left") return deltaX;
-    if (drag.direction === "right") return -deltaX;
-    return deltaY;
+function getInwardDistance(direction, deltaX, deltaY) {
+    if (direction === "left") return deltaX;
+    if (direction === "right") return -deltaX;
+    if (direction === "top") return deltaY;
+    return -deltaY;
 }
 
-function getControlTransform(direction, distance) {
-    const travel = Math.max(0, Math.min(distance, MAX_CONTROL_TRAVEL));
+function chooseDragDirection(candidates, deltaX, deltaY) {
+    let bestDirection = null;
+    let bestDistance = 0;
 
-    if (direction === "left") return `translateX(${travel}px)`;
-    if (direction === "right") return `translateX(${-travel}px)`;
-    return `translateY(${travel}px)`;
+    candidates.forEach((direction) => {
+        const distance = getInwardDistance(direction, deltaX, deltaY);
+        if (distance > bestDistance) {
+            bestDistance = distance;
+            bestDirection = direction;
+        }
+    });
+
+    return { direction: bestDirection, distance: bestDistance };
 }
 
-function startInsertionDrag(event) {
+function startBoardDrag(event) {
     if (isResolvingMove || activeDrag || gameOver) return;
 
-    const control = event.currentTarget;
-    const direction = control.dataset.direction;
+    const cell = event.target.closest?.(".cell");
+    if (!cell) return;
 
-    if (direction === "top" && !TOP_INSERTION_ENABLED) return;
+    const row = Number(cell.dataset.row);
+    const col = Number(cell.dataset.col);
+    const candidates = getCandidateDirections(row, col);
+    if (candidates.length === 0) return;
 
     activeDrag = {
-        control,
         pointerId: event.pointerId,
-        direction,
-        index: Number(control.dataset.index),
         startX: event.clientX,
         startY: event.clientY,
+        row,
+        col,
+        candidates,
+        direction: null,
         ready: false
     };
 
-    control.setPointerCapture(event.pointerId);
-    control.classList.add("insertion-control--dragging");
-    highlightTarget(activeDrag.direction, activeDrag.index);
+    const board = document.getElementById("board");
+    board.setPointerCapture(event.pointerId);
+    board.addEventListener("pointermove", updateBoardDrag);
+    board.addEventListener("pointerup", finishBoardDrag);
+    board.addEventListener("pointercancel", cancelBoardDrag);
+    board.addEventListener("lostpointercapture", cancelBoardDrag);
+    cell.classList.add("cell--drag-source");
     event.preventDefault();
 }
 
-function updateInsertionDrag(event) {
+function updateBoardDrag(event) {
     if (!activeDrag || event.pointerId !== activeDrag.pointerId) return;
 
-    const distance = getInwardDistance(event, activeDrag);
-    activeDrag.ready = distance >= DRAG_THRESHOLD;
+    const deltaX = event.clientX - activeDrag.startX;
+    const deltaY = event.clientY - activeDrag.startY;
+    const choice = chooseDragDirection(activeDrag.candidates, deltaX, deltaY);
 
-    activeDrag.control.style.transform = getControlTransform(
-        activeDrag.direction,
-        distance
-    );
-
-    activeDrag.control.classList.toggle(
-        "insertion-control--ready",
-        activeDrag.ready
-    );
-
-    event.preventDefault();
-}
-
-function finishInsertionDrag(event) {
-    if (!activeDrag || event.pointerId !== activeDrag.pointerId) return;
-
-    const move = {
-        direction: activeDrag.direction,
-        index: activeDrag.index,
-        ready: activeDrag.ready
-    };
-
-    cancelInsertionDrag();
+    activeDrag.direction = choice.direction;
+    activeDrag.ready = choice.distance >= DRAG_THRESHOLD;
     clearTargetHighlight();
 
-    if (!move.ready) return;
+    if (activeDrag.direction) {
+        const index = ["left", "right"].includes(activeDrag.direction) ? activeDrag.row : activeDrag.col;
+        highlightTarget(activeDrag.direction, index);
+    }
 
-    performInsertion(move.direction, move.index);
     event.preventDefault();
 }
 
-function cancelInsertionDrag() {
+function finishBoardDrag(event) {
+    if (!activeDrag || event.pointerId !== activeDrag.pointerId) return;
+
+    const direction = activeDrag.direction;
+    const index = ["left", "right"].includes(direction) ? activeDrag.row : activeDrag.col;
+    const ready = activeDrag.ready;
+
+    cancelBoardDrag();
+    if (ready && direction) performInsertion(direction, index);
+    event.preventDefault();
+}
+
+function cancelBoardDrag() {
     if (!activeDrag) return;
 
-    const { control, pointerId } = activeDrag;
+    const board = document.getElementById("board");
+    if (board?.hasPointerCapture?.(activeDrag.pointerId)) board.releasePointerCapture(activeDrag.pointerId);
+    board?.removeEventListener("pointermove", updateBoardDrag);
+    board?.removeEventListener("pointerup", finishBoardDrag);
+    board?.removeEventListener("pointercancel", cancelBoardDrag);
+    board?.removeEventListener("lostpointercapture", cancelBoardDrag);
 
-    if (control.hasPointerCapture?.(pointerId)) {
-        control.releasePointerCapture(pointerId);
-    }
-
-    control.classList.remove(
-        "insertion-control--dragging",
-        "insertion-control--ready"
-    );
-    control.style.transform = "";
+    document.querySelectorAll(".cell--drag-source").forEach((cell) => cell.classList.remove("cell--drag-source"));
     activeDrag = null;
     clearTargetHighlight();
 }
 
 function highlightTarget(direction, index) {
     clearTargetHighlight();
-
-    const selector = direction === "top"
+    const selector = ["top", "bottom"].includes(direction)
         ? `.cell[data-col="${index}"]`
         : `.cell[data-row="${index}"]`;
 
-    document.querySelectorAll(selector).forEach((cell) => {
-        cell.classList.add("cell--target");
-    });
+    document.querySelectorAll(selector).forEach((cell) => cell.classList.add("cell--target"));
 }
 
 function clearTargetHighlight() {
-    document.querySelectorAll(".cell--target").forEach((cell) => {
-        cell.classList.remove("cell--target");
-    });
+    document.querySelectorAll(".cell--target").forEach((cell) => cell.classList.remove("cell--target"));
 }
 
 function performInsertion(direction, index) {
     if (isResolvingMove || gameOver) return;
     if (direction === "top" && !TOP_INSERTION_ENABLED) return;
+    if (direction === "bottom" && !BOTTOM_INSERTION_ENABLED) return;
 
     isResolvingMove = true;
-
-    const playerIndex = activePlayerIndex;
     const incomingTile = getCurrentIncomingTile();
-    let ejectedTile = null;
 
-    if (direction === "left") {
-        ejectedTile = insertRowFromLeft(index, incomingTile);
-    } else if (direction === "right") {
-        ejectedTile = insertRowFromRight(index, incomingTile);
-    } else {
-        ejectedTile = insertColumnFromTop(index, incomingTile);
-    }
-
-    console.log("Vložen kámen:", {
-        player: playerIndex + 1,
-        direction,
-        index,
-        tile: incomingTile,
-        ejectedTile
-    });
+    if (direction === "left") insertRowFromLeft(index, incomingTile);
+    else if (direction === "right") insertRowFromRight(index, incomingTile);
+    else if (direction === "top") insertColumnFromTop(index, incomingTile);
+    else insertColumnFromBottom(index, incomingTile);
 
     consumeCurrentTile();
     updatePlayerDisplays();
@@ -433,26 +365,17 @@ function switchPlayer() {
 
 function completeTurn() {
     isResolvingMove = false;
-
-    if (!gameOver) {
-        switchPlayer();
-    }
+    if (!gameOver) switchPlayer();
 }
 
 function finishMoveResolution() {
     const matches = findMatches();
-
-    if (matches.length > 0) {
-        resolveMatches(matches);
-    } else {
-        console.log("Kombinace:", matches);
-        completeTurn();
-    }
+    if (matches.length > 0) resolveMatches(matches);
+    else completeTurn();
 }
 
 function applyGravityAfterMove() {
     const gravity = applyGravity();
-
     if (gravity.fallingTiles.length === 0) {
         finishMoveResolution();
         return;
@@ -460,52 +383,36 @@ function applyGravityAfterMove() {
 
     drawBoard();
     animateGravity(gravity.fallingTiles);
-
-    scheduleTimeout(() => {
-        finishMoveResolution();
-    }, ANIMATION_DURATION);
+    scheduleTimeout(finishMoveResolution, ANIMATION_DURATION);
 }
 
 function resolveMatches(matches) {
     const reward = calculateMatchReward();
-
-    console.log("Kombinace:", matches, "Odměna:", reward);
     transferScoreToActivePlayer(reward);
     animateMatches(matches);
 
     scheduleTimeout(() => {
         clearMatches(matches);
-
         const gravity = applyGravity();
-
         drawBoard();
         animateGravity(gravity.fallingTiles);
 
         scheduleTimeout(() => {
             const nextMatches = findMatches();
-
-            if (nextMatches.length > 0) {
-                resolveMatches(nextMatches);
-            } else {
-                completeTurn();
-            }
+            if (nextMatches.length > 0) resolveMatches(nextMatches);
+            else completeTurn();
         }, ANIMATION_DURATION);
     }, ANIMATION_DURATION);
 }
 
-
 function preventGameGesture(event) {
-    if (event.target.closest?.(".game-shell")) {
-        event.preventDefault();
-    }
+    if (event.target.closest?.(".game-shell")) event.preventDefault();
 }
 
 document.addEventListener("gesturestart", preventGameGesture, { passive: false });
 document.addEventListener("contextmenu", preventGameGesture);
-window.addEventListener("blur", cancelInsertionDrag);
+window.addEventListener("blur", cancelBoardDrag);
 
 document.addEventListener("selectstart", (event) => {
-    if (activeDrag || event.target.closest?.(".game-shell, .debug-panel")) {
-        event.preventDefault();
-    }
+    if (activeDrag || event.target.closest?.(".game-shell, .debug-panel")) event.preventDefault();
 });

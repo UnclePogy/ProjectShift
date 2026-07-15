@@ -2,19 +2,23 @@ const LAB_DEFAULTS = {
     boardSize: 4,
     symbolCount: 15,
     queueSize: 2,
+    startingScore: 7,
+    sharedQueueEnabled: false,
     animationDuration: 500,
     topInsertionEnabled: true,
-    scoreDisplayEnabled: true
+    bottomInsertionEnabled: false,
+    scoreDisplayEnabled: true,
+    queueTileScale: 110,
+    symbolScale: 120,
+    queueGap: 10
 };
 
 function resetBoard() {
     cancelActiveMove();
-
     createBoard();
     resetPlayerState();
     drawBoard();
     initInsertionControls();
-
     console.log("Laboratoř: vytvořena nová deska a resetováni hráči");
 }
 
@@ -28,18 +32,17 @@ function createLabField(labelText, control) {
 
     field.appendChild(label);
     field.appendChild(control);
-
     return field;
 }
 
-function createSelect(options, value) {
+function createSelect(options, value, format = (item) => String(item)) {
     const select = document.createElement("select");
     select.className = "debug-panel__select";
 
     options.forEach((optionValue) => {
         const option = document.createElement("option");
         option.value = String(optionValue);
-        option.textContent = String(optionValue);
+        option.textContent = format(optionValue);
         option.selected = optionValue === value;
         select.appendChild(option);
     });
@@ -47,26 +50,33 @@ function createSelect(options, value) {
     return select;
 }
 
-function applyLaboratorySettings(controls) {
-    const settings = {
+function readLaboratorySettings(controls) {
+    return {
         boardSize: Number(controls.boardSize.value),
         symbolCount: Number(controls.symbolCount.value),
         queueSize: Number(controls.queueSize.value),
+        startingScore: Number(controls.startingScore.value),
+        sharedQueueEnabled: controls.sharedQueueEnabled.checked,
         animationDuration: Number(controls.animationDuration.value),
         topInsertionEnabled: controls.topInsertionEnabled.checked,
-        scoreDisplayEnabled: controls.scoreDisplayEnabled.checked
+        bottomInsertionEnabled: controls.bottomInsertionEnabled.checked,
+        scoreDisplayEnabled: controls.scoreDisplayEnabled.checked,
+        queueTileScale: Number(controls.queueTileScale.value),
+        symbolScale: Number(controls.symbolScale.value),
+        queueGap: Number(controls.queueGap.value)
     };
+}
 
+function applyLaboratorySettings(controls) {
+    const settings = readLaboratorySettings(controls);
     setBoardConfiguration(settings);
     setInputConfiguration(settings);
     resetBoard();
-
     console.log("Laboratoř: použito nastavení", settings);
 }
 
 function initDebugPanel() {
-    const existingPanel = document.querySelector(".debug-panel");
-    existingPanel?.remove();
+    document.querySelector(".debug-panel")?.remove();
 
     const panel = document.createElement("aside");
     panel.className = "debug-panel";
@@ -90,18 +100,31 @@ function initDebugPanel() {
     const content = document.createElement("div");
     content.className = "debug-panel__content";
 
+    const percentOptions = Array.from({ length: 11 }, (_, index) => 100 + index * 10);
     const boardSize = createSelect([4, 5, 6], LAB_DEFAULTS.boardSize);
     const symbolCount = createSelect(Array.from({ length: 12 }, (_, index) => index + 4), LAB_DEFAULTS.symbolCount);
     const queueSize = createSelect([1, 2, 3, 5], LAB_DEFAULTS.queueSize);
-    const animationDuration = createSelect(
-        [100, 250, 500, 1000, 1500],
-        LAB_DEFAULTS.animationDuration
-    );
+    const startingScore = createSelect(Array.from({ length: 15 }, (_, index) => index + 1), LAB_DEFAULTS.startingScore);
+    const queueTileScale = createSelect(percentOptions, LAB_DEFAULTS.queueTileScale, (value) => `${value} %`);
+    const symbolScale = createSelect(percentOptions, LAB_DEFAULTS.symbolScale, (value) => `${value} %`);
+    const queueGap = createSelect([0, 5, 10, 15, 20, 25, 30], LAB_DEFAULTS.queueGap, (value) => `${value} px`);
+
+    const sharedQueueEnabled = document.createElement("input");
+    sharedQueueEnabled.type = "checkbox";
+    sharedQueueEnabled.className = "debug-panel__checkbox";
+    sharedQueueEnabled.checked = LAB_DEFAULTS.sharedQueueEnabled;
+
+    const animationDuration = createSelect([100, 250, 500, 1000, 1500], LAB_DEFAULTS.animationDuration);
 
     const topInsertionEnabled = document.createElement("input");
     topInsertionEnabled.type = "checkbox";
     topInsertionEnabled.className = "debug-panel__checkbox";
     topInsertionEnabled.checked = LAB_DEFAULTS.topInsertionEnabled;
+
+    const bottomInsertionEnabled = document.createElement("input");
+    bottomInsertionEnabled.type = "checkbox";
+    bottomInsertionEnabled.className = "debug-panel__checkbox";
+    bottomInsertionEnabled.checked = LAB_DEFAULTS.bottomInsertionEnabled;
 
     const scoreDisplayEnabled = document.createElement("input");
     scoreDisplayEnabled.type = "checkbox";
@@ -113,6 +136,11 @@ function initDebugPanel() {
     applyButton.type = "button";
     applyButton.textContent = "Použít a resetovat";
 
+    const defaultsButton = document.createElement("button");
+    defaultsButton.className = "debug-panel__button";
+    defaultsButton.type = "button";
+    defaultsButton.textContent = "Výchozí nastavení";
+
     const newBoardButton = document.createElement("button");
     newBoardButton.className = "debug-panel__button";
     newBoardButton.type = "button";
@@ -122,22 +150,20 @@ function initDebugPanel() {
         boardSize,
         symbolCount,
         queueSize,
+        startingScore,
+        sharedQueueEnabled,
         animationDuration,
         topInsertionEnabled,
-        scoreDisplayEnabled
+        bottomInsertionEnabled,
+        scoreDisplayEnabled,
+        queueTileScale,
+        symbolScale,
+        queueGap
     };
 
     animationDuration.addEventListener("change", () => {
         ANIMATION_DURATION = Number(animationDuration.value);
-        document.documentElement.style.setProperty(
-            "--animation-duration",
-            `${ANIMATION_DURATION}ms`
-        );
-    });
-
-    topInsertionEnabled.addEventListener("change", () => {
-        TOP_INSERTION_ENABLED = topInsertionEnabled.checked;
-        updateTopInsertionVisibility();
+        document.documentElement.style.setProperty("--animation-duration", `${ANIMATION_DURATION}ms`);
     });
 
     scoreDisplayEnabled.addEventListener("change", () => {
@@ -145,7 +171,23 @@ function initDebugPanel() {
         updateScoreVisibility();
     });
 
-    applyButton.addEventListener("click", () => {
+    [queueTileScale, symbolScale, queueGap].forEach((control) => {
+        control.addEventListener("change", () => {
+            const settings = readLaboratorySettings(controls);
+            setInputConfiguration(settings);
+            updatePlayerDisplays();
+        });
+    });
+
+    applyButton.addEventListener("click", () => applyLaboratorySettings(controls));
+
+    defaultsButton.addEventListener("click", () => {
+        Object.entries(LAB_DEFAULTS).forEach(([key, value]) => {
+            const control = controls[key];
+            if (!control) return;
+            if (control.type === "checkbox") control.checked = value;
+            else control.value = String(value);
+        });
         applyLaboratorySettings(controls);
     });
 
@@ -154,10 +196,17 @@ function initDebugPanel() {
     content.appendChild(createLabField("Deska", boardSize));
     content.appendChild(createLabField("Typy kamenů", symbolCount));
     content.appendChild(createLabField("Fronta", queueSize));
+    content.appendChild(createLabField("Velikost fronty", queueTileScale));
+    content.appendChild(createLabField("Velikost symbolů", symbolScale));
+    content.appendChild(createLabField("Rozestup fronty", queueGap));
+    content.appendChild(createLabField("Počáteční body", startingScore));
+    content.appendChild(createLabField("Společná fronta", sharedQueueEnabled));
     content.appendChild(createLabField("Animace (ms)", animationDuration));
     content.appendChild(createLabField("Vkládání shora", topInsertionEnabled));
+    content.appendChild(createLabField("Vkládání odspodu", bottomInsertionEnabled));
     content.appendChild(createLabField("Zobrazit skóre", scoreDisplayEnabled));
     content.appendChild(applyButton);
+    content.appendChild(defaultsButton);
     content.appendChild(newBoardButton);
 
     const setCollapsed = (collapsed) => {
@@ -166,21 +215,14 @@ function initDebugPanel() {
         toggleButton.textContent = collapsed ? "Otevřít" : "Skrýt";
     };
 
-    toggleButton.addEventListener("click", () => {
-        setCollapsed(!panel.classList.contains("debug-panel--collapsed"));
-    });
+    toggleButton.addEventListener("click", () => setCollapsed(!panel.classList.contains("debug-panel--collapsed")));
 
     panel.appendChild(header);
     panel.appendChild(content);
     document.body.appendChild(panel);
-
     setCollapsed(window.matchMedia("(max-width: 620px)").matches);
 }
 
 document.addEventListener("keydown", (event) => {
-    if (event.repeat) return;
-
-    if (event.key.toLowerCase() === "r") {
-        resetBoard();
-    }
+    if (!event.repeat && event.key.toLowerCase() === "r") resetBoard();
 });

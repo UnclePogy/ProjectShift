@@ -172,3 +172,27 @@ function insertColumnFromTop(colIndex, tileValue) {
     gameBoard[0][colIndex] = tileValue;
     return ejectedTile;
 }
+
+function insertColumnFromBottom(colIndex, tileValue) {
+    let emptyRow = -1;
+    let ejectedTile = null;
+
+    for (let row = SIZE - 1; row >= 0; row--) {
+        if (gameBoard[row][colIndex] === null) {
+            emptyRow = row;
+            break;
+        }
+    }
+
+    if (emptyRow === -1) {
+        ejectedTile = gameBoard[0][colIndex];
+        emptyRow = 0;
+    }
+
+    for (let row = emptyRow; row < SIZE - 1; row++) {
+        gameBoard[row][colIndex] = gameBoard[row + 1][colIndex];
+    }
+
+    gameBoard[SIZE - 1][colIndex] = tileValue;
+    return ejectedTile;
+}
