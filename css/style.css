@@ -412,3 +412,43 @@ h1 {
         font-size: 9px;
     }
 }
+
+.debug-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.debug-panel__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.debug-panel__toggle {
+    padding: 5px 8px;
+    border: 1px solid #777;
+    border-radius: 4px;
+    background: #333;
+    color: #fff;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.debug-panel--collapsed .debug-panel__content {
+    display: none;
+}
+
+@media (max-width: 620px) {
+    .debug-panel {
+        width: auto;
+        max-width: calc(100% - 20px);
+        margin-top: 10px;
+        padding: 8px 10px;
+    }
+
+    .debug-panel--collapsed {
+        align-self: flex-start;
+    }
+}

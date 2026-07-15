@@ -1,17 +1,19 @@
 console.log("BOARD LOADED");
 
 const AVAILABLE_COLORS = [
-    "#ff595e",
-    "#ffca3a",
-    "#8ac926",
-    "#1982c4",
-    "#6a4c93",
-    "#00b4d8",
-    "#f15bb5"
+    "#e63946", // červená
+    "#ffd166", // žlutá
+    "#43aa8b", // zelená
+    "#277da1", // modrá
+    "#7b2cbf", // fialová
+    "#f77f00", // oranžová
+    "#ff4d9d", // růžová
+    "#00b4d8", // tyrkysová
+    "#8d5524"  // hnědá
 ];
 
 let SIZE = 4;
-let SYMBOL_COUNT = 5;
+let SYMBOL_COUNT = 9;
 let COLORS = AVAILABLE_COLORS.slice(0, SYMBOL_COUNT);
 let gameBoard = [];
 

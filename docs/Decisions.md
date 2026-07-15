@@ -98,14 +98,14 @@ Stav: 🟡 testovací nastavení
 
 #024
 
-Prototyp používá dva střídající se hráče. Každý hráč má vlastní nezávislou frontu tří viditelných příchozích kamenů. První kámen ve frontě je aktuálně použitelný, po tahu se spotřebuje a na konec fronty se doplní nový náhodný kámen. Hráč se vystřídá až po dokončení gravitace, odstranění kombinací a všech kaskád. Vstupní šipky vždy zobrazují barvu aktuálního kamene hráče na tahu.
+Prototyp používá dva střídající se hráče. Každý hráč má vlastní nezávislou frontu dvou viditelných příchozích kamenů. První kámen ve frontě je aktuálně použitelný, po tahu se spotřebuje a na konec fronty se doplní nový náhodný kámen. Hráč se vystřídá až po dokončení gravitace, odstranění kombinací a všech kaskád. Vstupní šipky vždy zobrazují barvu aktuálního kamene hráče na tahu.
 
 Stav: 🟡 testuje se
 
 
 #025
 
-Prototyp dočasně používá 7 typů kamenů místo 5. Cílem testu je snížit četnost kombinací a zpomalit vyprazdňování desky. Výsledek se vyhodnotí podle délky partie, četnosti kombinací a čitelnosti barev.
+Prototyp dočasně používá 9 typů kamenů. Cílem testu je dále snížit četnost náhodných kombinací a lépe oddělit plánované tahy od náhody. Použitá paleta má devět výrazně odlišných barev. Výsledek se vyhodnotí podle délky partie, četnosti kombinací a čitelnosti na telefonu.
 
 Stav: 🟡 testuje se
 

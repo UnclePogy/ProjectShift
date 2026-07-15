@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — mobilní test 9 typů
+
+### Změněno
+
+- Výchozí počet typů kamenů zvýšen ze 7 na 9.
+- Laboratoř nyní umožňuje volit 4 až 9 typů kamenů.
+- Paleta rozšířena o dvě výrazně odlišné barvy pro lepší rozpoznání na telefonu.
+- Výchozí fronta zůstává zkrácená na 2 kameny.
+- Laboratoř se na malém displeji automaticky otevře sbalená, aby nezmenšovala hrací plochu.
+
 ## v0.4.2 — 15. 7. 2026
 
 ### Opraveno

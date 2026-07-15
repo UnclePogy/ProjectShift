@@ -1,7 +1,7 @@
 const LAB_DEFAULTS = {
     boardSize: 4,
-    symbolCount: 5,
-    queueSize: 3,
+    symbolCount: 9,
+    queueSize: 2,
     animationDuration: 500,
     topInsertionEnabled: true,
     scoreDisplayEnabled: true
@@ -71,13 +71,28 @@ function initDebugPanel() {
     const panel = document.createElement("aside");
     panel.className = "debug-panel";
 
+    const header = document.createElement("div");
+    header.className = "debug-panel__header";
+
     const title = document.createElement("h2");
     title.className = "debug-panel__title";
     title.textContent = "LABORATOŘ";
 
+    const toggleButton = document.createElement("button");
+    toggleButton.className = "debug-panel__toggle";
+    toggleButton.type = "button";
+    toggleButton.setAttribute("aria-expanded", "true");
+    toggleButton.textContent = "Skrýt";
+
+    header.appendChild(title);
+    header.appendChild(toggleButton);
+
+    const content = document.createElement("div");
+    content.className = "debug-panel__content";
+
     const boardSize = createSelect([4, 5, 6], LAB_DEFAULTS.boardSize);
-    const symbolCount = createSelect([4, 5, 6, 7], LAB_DEFAULTS.symbolCount);
-    const queueSize = createSelect([1, 3, 5], LAB_DEFAULTS.queueSize);
+    const symbolCount = createSelect([4, 5, 6, 7, 8, 9], LAB_DEFAULTS.symbolCount);
+    const queueSize = createSelect([1, 2, 3, 5], LAB_DEFAULTS.queueSize);
     const animationDuration = createSelect(
         [100, 250, 500, 1000, 1500],
         LAB_DEFAULTS.animationDuration
@@ -136,17 +151,30 @@ function initDebugPanel() {
 
     newBoardButton.addEventListener("click", resetBoard);
 
-    panel.appendChild(title);
-    panel.appendChild(createLabField("Deska", boardSize));
-    panel.appendChild(createLabField("Typy kamenů", symbolCount));
-    panel.appendChild(createLabField("Fronta", queueSize));
-    panel.appendChild(createLabField("Animace (ms)", animationDuration));
-    panel.appendChild(createLabField("Vkládání shora", topInsertionEnabled));
-    panel.appendChild(createLabField("Zobrazit skóre", scoreDisplayEnabled));
-    panel.appendChild(applyButton);
-    panel.appendChild(newBoardButton);
+    content.appendChild(createLabField("Deska", boardSize));
+    content.appendChild(createLabField("Typy kamenů", symbolCount));
+    content.appendChild(createLabField("Fronta", queueSize));
+    content.appendChild(createLabField("Animace (ms)", animationDuration));
+    content.appendChild(createLabField("Vkládání shora", topInsertionEnabled));
+    content.appendChild(createLabField("Zobrazit skóre", scoreDisplayEnabled));
+    content.appendChild(applyButton);
+    content.appendChild(newBoardButton);
 
+    const setCollapsed = (collapsed) => {
+        panel.classList.toggle("debug-panel--collapsed", collapsed);
+        toggleButton.setAttribute("aria-expanded", String(!collapsed));
+        toggleButton.textContent = collapsed ? "Otevřít" : "Skrýt";
+    };
+
+    toggleButton.addEventListener("click", () => {
+        setCollapsed(!panel.classList.contains("debug-panel--collapsed"));
+    });
+
+    panel.appendChild(header);
+    panel.appendChild(content);
     document.body.appendChild(panel);
+
+    setCollapsed(window.matchMedia("(max-width: 620px)").matches);
 }
 
 document.addEventListener("keydown", (event) => {
