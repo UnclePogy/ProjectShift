@@ -18,8 +18,8 @@ const AVAILABLE_TILES = [
     { color: "#c77dff", symbol: "⬥", textColor: "#22102f" }
 ];
 
-let SIZE = 4;
-let SYMBOL_COUNT = 15;
+let SIZE = 5;
+let SYMBOL_COUNT = 10;
 let TILES = AVAILABLE_TILES.slice(0, SYMBOL_COUNT);
 let COLORS = TILES.map((tile) => tile.color);
 let gameBoard = [];

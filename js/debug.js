@@ -1,6 +1,6 @@
 const LAB_DEFAULTS = {
-    boardSize: 4,
-    symbolCount: 15,
+    boardSize: 5,
+    symbolCount: 10,
     queueSize: 2,
     startingScore: 7,
     sharedQueueEnabled: false,

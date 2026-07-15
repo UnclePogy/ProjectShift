@@ -1,160 +1,105 @@
-#008
+# Project Shift – Decisions
 
-Základní movement systém je uzavřen.
+Tento soubor zaznamenává rozhodnutí, která určují aktuální prototyp. Označení **testuje se** znamená, že funkce je implementovaná, ale nemusí se stát finálním pravidlem.
 
-Řádky a sloupce se posouvají o 1.
+## Platná rozhodnutí
 
-Stav: 🟢 potvrzeno
-
-#019
-
-Pád kamenů je animovaný krátkým plynulým pohybem. Rychlost je pro prototyp vyhovující.
-
-Stav: 🟢 potvrzeno
-
-#018
-
-Po vymazání kombinace kameny v každém sloupci padají dolů a nově vytvořené kameny vstupují shora.
-
-Stav: 🟢 potvrzeno
-
-#015
-
-Překřížené kombinace zatím nesjednocujeme. Jejich chování ověříme při vizuálním testu mazání kamenů a teprve potom potvrdíme finální pravidlo.
-
-Stav: 🟡 čeká na test
-
-#016
-
-Řetězové kombinace zatím nevyhodnocujeme. Přidáme je až společně s gravitací kamenů, aby pro hráče působily přirozeně.
-
-Stav: 🟢 potvrzeno
-
-#017
-
-Animace vymazání kombinace a objevení nových kamenů je otestovaná. Délka animace je pro prototyp vyhovující.
-
-Stav: 🟢 potvrzeno
-
-#014
-
-Funkce findMatches() vrací všechny kameny z vodorovných i svislých kombinací. Výsledek byl ověřen v prohlížeči.
-
-Stav: 🟢 potvrzeno
-
-#013
-
-Detekce vodorovných i svislých kombinací je samostatně ověřena v prohlížeči.
-
-Stav: 🟢 potvrzeno
-
-#011
-
-Kameny z kombinace se pro první prototyp nahradí náhodnými novými barvami. Fyziku pádu zatím neřešíme.
-
-Stav: 🟡 testovací pravidlo
-
-#012
-
-V prvním prototypu vyhodnocujeme jen kombinaci vytvořenou hráčovým tahem. Náhodně doplněné kameny zatím řetězovou kombinaci nespouštějí.
-
-Stav: 🟡 testovací pravidlo
-
-#010
-
-Kombinaci tvoří alespoň 3 stejné kameny v souvislé vodorovné nebo svislé řadě. Hranici ověříme během testování.
-
-Stav: 🟢 potvrzeno
-
-#009
+### #009 – Směry kombinací
 
 Kombinace se vyhodnocují vodorovně i svisle.
 
-Stav: 🟢 potvrzeno
+**Stav:** potvrzeno
 
-#020
+### #010 – Minimální kombinace
 
-Po odstranění kombinace se náhodné kameny automaticky nedoplňují. Kameny spadnou dolů a vzniklá prázdná pole zůstávají součástí herního stavu.
+Kombinaci tvoří nejméně tři stejné kameny v souvislé řadě.
 
-Stav: 🟢 potvrzeno
+**Stav:** potvrzeno
 
-#021
+### #014 – Sjednocení polí kombinací
 
-Hráč vkládá nový kámen zleva nebo zprava do řádku, případně shora do sloupce. Posouvají se pouze kameny mezi vstupem a prvním prázdným polem. Prázdné pole se zaplní a neposouvá se dál. Pokud řada žádné prázdné pole nemá, kámen na opačném konci vypadne a zmizí. Kameny se nikdy neotáčejí dokola.
+Při jednom vyhodnocení se každé zasažené pole odstraní pouze jednou, i když patří do vodorovné i svislé kombinace.
 
-Stav: 🟡 testuje se
+**Stav:** potvrzeno
 
-#022
+### #020 – Prázdná pole bez náhodného doplnění
 
-Vkládání se ovládá tažením vstupního bodu směrem do desky. Stejný systém používá myš i dotyk prostřednictvím Pointer Events. Dokud hráč drží tlačítko myši nebo prst, herní stav se nemění. Tah se provede až po puštění po překročení minimální vzdálenosti. Při návratu před práh se tah zruší.
+Po odstranění kombinace kameny spadnou dolů. Nové náhodné kameny se shora nedoplňují a vzniklá prázdná pole zůstávají součástí herního stavu.
 
-Stav: 🟡 testuje se
+**Stav:** potvrzeno
 
-#023
+### #021 – Vkládání z hran
 
-Animace mazání, pádu a kaskád zůstávají v prototypu dočasně nastavené na 500 ms, protože kratší hodnoty byly při současném testování hůře čitelné. Finální rychlost se určí při pozdějším ladění UX.
+Hráč vloží jeden příchozí kámen ze zvolené hrany. Posun končí v prvním prázdném poli. Pokud žádné není, kámen na protější straně vypadne. Kameny se nikdy neotáčejí dokola.
 
-Stav: 🟡 testovací nastavení
+Zleva a zprava lze vkládat vždy. Vkládání shora je výchozí testovací směr a vkládání odspodu je volitelná testovací varianta.
 
-#024
+**Stav:** testuje se
 
-Prototyp používá dva střídající se hráče. Každý hráč má vlastní nezávislou frontu dvou viditelných příchozích kamenů. První kámen ve frontě je aktuálně použitelný, po tahu se spotřebuje a na konec fronty se doplní nový náhodný kámen. Hráč se vystřídá až po dokončení gravitace, odstranění kombinací a všech kaskád. Vstupní šipky vždy zobrazují barvu aktuálního kamene hráče na tahu.
+### #022 – Tažení krajního kamene
 
-Stav: 🟡 testuje se
+Tah začíná přímo na krajním kameni desky, nikoli na samostatné šipce nebo vstupním bodu. Myš i dotyk používají Pointer Events. Tah se provede po puštění a překročení prahu 24 px; kratší tažení se zruší.
 
+**Stav:** testuje se
 
-#025
+### #023 – Rychlost animací
 
-Prototyp dočasně používá 9 typů kamenů. Cílem testu je dále snížit četnost náhodných kombinací a lépe oddělit plánované tahy od náhody. Použitá paleta má devět výrazně odlišných barev. Výsledek se vyhodnotí podle délky partie, četnosti kombinací a čitelnosti na telefonu.
+Výchozí délka animace je 500 ms. Laboratoř umožňuje 100, 250, 500, 1000 a 1500 ms. Finální hodnota se určí mobilním testem čitelnosti a tempa.
 
-Stav: 🟡 testuje se
+**Stav:** testuje se
 
+### #024 – Dva hráči a fronty
 
-## Decision: testovací varianta 4×4 s pěti typy kamenů
+Hráči se střídají až po dokončení gravitace a všech kaskád. Výchozí varianta používá dvě viditelné položky a samostatnou frontu pro každého hráče. Společná fronta je dostupná pouze jako testovací možnost.
 
-**Stav:** Testuje se
+**Stav:** testuje se
 
-Hrací deska se dočasně mění z 5×5 na 4×4 a počet typů kamenů ze 7 na 5.
+### #027 – Převod skóre
 
-**Důvod:** Sedm barev bylo při testování špatně rozlišitelných. Menší deska má ověřit, zda kombinace 4×4 + 5 typů kamenů nabídne lepší čitelnost a tempo hry bez příliš rychlého vyprazdňování pole.
+Oba hráči začínají se stejným počtem bodů, výchozí hodnota je 7. Za každou sestavu se od soupeře převede `délka sestavy − 2` bodů. Kaskády bodují stejně. Vítězí hráč, který získá všechny body ve hře; automatický restart se neprovádí.
 
-#026
+**Stav:** testuje se
 
-Do debug panelu byla přidána Laboratoř pro rychlé porovnávání variant. Velikost desky, počet typů kamenů a délka fronty se použijí po potvrzení a resetu. Rychlost animací a povolení horního vkládání lze měnit okamžitě během testování.
+### #028 – Volitelné zobrazení skóre
 
-Stav: 🟡 testuje se
+Laboratoř může skóre skrýt bez změny pravidel nebo interního stavu bodů.
 
-#027
+**Stav:** testuje se
 
-Každý hráč začíná se 7 ikonami. Za každou vytvořenou sestavu se ikony přesouvají od soupeře k hráči, který tah provedl. Sestava 3 převádí 1 ikonu, sestava 4 převádí 2 ikony a sestava 5 převádí 3 ikony. Kaskády se započítávají stejně. Po získání všech 14 ikon se zobrazí vítěz a partie zůstane na obrazovce do ručního resetu.
+### #030 – Jednotné časování
 
-Stav: 🟡 testuje se
+Změna délky animace se současně promítne do časování JavaScriptu i CSS.
 
-#028
+**Stav:** potvrzeno pro prototyp
 
-Laboratoř může skrýt nebo zobrazit vizuální skóre bez změny samotných pravidel skórování.
+### #031 – Výchozí test 5×5 a 10 typů
 
-Stav: 🟡 testuje se
+Výchozí prototyp používá desku 5×5 a 10 typů kamenů. Důvodem je hledání kompromisu mezi čitelností, plánováním a četností kombinací. Laboratoř nadále umožňuje desky 4×4 až 6×6 a 4 až 15 typů.
 
-#029
+Deset typů není potvrzené finální pravidlo. Varianta musí projít měřením délky partií a četnosti smysluplných tahů.
 
-Příchozí kameny ve frontě se zobrazují ve stejné velikosti jako kameny na hrací desce, aby byly lépe čitelné na telefonu i počítači.
+**Stav:** testuje se
 
-Stav: 🟡 testuje se
+### #032 – Překřížené sestavy
 
-#030
+Vodorovná a svislá sestava se pro skóre aktuálně počítají samostatně. Jejich společné pole se vymaže pouze jednou. Toto chování odpovídá současnému kódu, ale jeho dopad na hráčský zážitek ještě není potvrzen.
 
-Laboratoř umožňuje testovat délku animací 100, 250, 500, 1000 a 1500 ms. Změna rychlosti se aplikuje okamžitě na časování JavaScriptu i CSS animace.
+**Stav:** testuje se
 
-Stav: 🟡 testuje se
+### #033 – Laboratoř není finální UI
 
-## Testovací paleta až 15 typů kamenů
+Laboratoř slouží k porovnávání variant. Přítomnost nastavení v Laboratoři neznamená, že daná možnost patří do finální hry.
 
-Laboratoř umožňuje testovat 4 až 15 typů kamenů. Při vyšším počtu se kameny nerozlišují pouze barvou, ale také symbolem. Jde o testovací rozsah; finální počet bude určen podle četnosti kombinací, čitelnosti a tempa hry.
+**Stav:** potvrzeno
 
+## Nahrazená rozhodnutí
 
-## Testovací varianty fronty a délky partie
+Následující výroky již nepopisují aktuální hru:
 
-- Laboratoř umožňuje nastavit 1–15 počátečních bodů na hráče.
-- Fronta může být samostatná pro každého hráče nebo společná pro oba.
-- Obě možnosti jsou testovací; nejde zatím o finální pravidlo hry.
+- **#008:** původní posun celého řádku nebo sloupce byl nahrazen vkládáním z hran.
+- **#011:** náhodné nahrazování odstraněných kamenů bylo nahrazeno trvalými prázdnými poli.
+- **#012 a #016:** odklad řetězových kombinací byl nahrazen plnými kaskádami po gravitaci.
+- **#018:** doplňování nových kamenů shora bylo nahrazeno rozhodnutím #020.
+- **#025:** výchozích 9 typů bylo po testu nahrazeno rozhodnutím #031.
+- **Pokus s 15 typy:** zůstává dostupný v Laboratoři, ale není výchozím nastavením.
+- **#029:** fronta už nemá přesně stejnou velikost jako deska; aktuální výchozí hodnota je 110 % a je nastavitelná.

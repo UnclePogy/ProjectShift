@@ -1,5 +1,5 @@
 :root {
-    --board-size: 4;
+    --board-size: 5;
     --cell-size: clamp(36px, 10.5vw, 70px);
     --board-gap: 5px;
     --control-size: clamp(34px, 9vw, 44px);
