@@ -1,3 +1,19 @@
+# Changelog
+
+## v0.4.2 — 15. 7. 2026
+
+### Opraveno
+
+- Počáteční hrací plocha se nyní generuje bez hotových vodorovných nebo svislých kombinací tří a více kamenů.
+- První skóre tak vždy vzniká až výsledkem tahu hráče, nikoli náhodným rozlosováním.
+
+## Unreleased
+
+- Přidána mobilní konfigurace viewportu včetně safe-area podpory pro iPhone.
+- Upraven responzivní layout desky, ovládacích bodů a hráčských panelů pro malé displeje.
+- Zabráněno nechtěnému zoomování, výběru textu a posouvání stránky během ovládání hry.
+- Live Server je nastavený pro testování z telefonu ve stejné lokální síti.
+
 # CHANGELOG
 
 V tomto souboru jsou zaznamenány všechny významné změny projektu **Project Shift**.

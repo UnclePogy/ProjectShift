@@ -245,6 +245,7 @@ function createInsertionControl(direction, index) {
     control.addEventListener("pointermove", updateInsertionDrag);
     control.addEventListener("pointerup", finishInsertionDrag);
     control.addEventListener("pointercancel", cancelInsertionDrag);
+    control.addEventListener("lostpointercapture", cancelInsertionDrag);
 
     return control;
 }
@@ -488,3 +489,14 @@ function resolveMatches(matches) {
         }, ANIMATION_DURATION);
     }, ANIMATION_DURATION);
 }
+
+
+function preventGameGesture(event) {
+    if (event.target.closest?.(".game-shell")) {
+        event.preventDefault();
+    }
+}
+
+document.addEventListener("gesturestart", preventGameGesture, { passive: false });
+document.addEventListener("contextmenu", preventGameGesture);
+window.addEventListener("blur", cancelInsertionDrag);

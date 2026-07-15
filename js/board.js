@@ -27,17 +27,45 @@ function createRandomTile() {
     return Math.floor(Math.random() * COLORS.length);
 }
 
+function shuffleValues(values) {
+    for (let index = values.length - 1; index > 0; index--) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [values[index], values[randomIndex]] = [values[randomIndex], values[index]];
+    }
+
+    return values;
+}
+
+function createsStartingMatch(row, col, tileValue) {
+    const createsHorizontalMatch =
+        col >= 2 &&
+        gameBoard[row][col - 1] === tileValue &&
+        gameBoard[row][col - 2] === tileValue;
+
+    const createsVerticalMatch =
+        row >= 2 &&
+        gameBoard[row - 1][col] === tileValue &&
+        gameBoard[row - 2][col] === tileValue;
+
+    return createsHorizontalMatch || createsVerticalMatch;
+}
+
 function createBoard() {
     gameBoard = [];
 
     for (let row = 0; row < SIZE; row++) {
-        const newRow = [];
+        gameBoard.push([]);
 
         for (let col = 0; col < SIZE; col++) {
-            newRow.push(createRandomTile());
-        }
+            const candidates = shuffleValues(
+                Array.from({ length: COLORS.length }, (_, value) => value)
+            );
+            const tileValue = candidates.find(
+                (candidate) => !createsStartingMatch(row, col, candidate)
+            );
 
-        gameBoard.push(newRow);
+            gameBoard[row].push(tileValue);
+        }
     }
 }
 
