@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Shift – Simulátor</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f4f4f4; color: #161616; }
+        main { max-width: 1100px; margin: auto; }
+        form { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; background: white; padding: 18px; border-radius: 10px; }
+        label { display: grid; gap: 5px; font-weight: 600; }
+        input, select, button { font: inherit; padding: 8px; }
+        .check { display: flex; align-items: center; gap: 8px; }
+        .actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; }
+        button { cursor: pointer; }
+        pre { overflow: auto; min-height: 260px; background: #151515; color: #efefef; padding: 18px; border-radius: 10px; }
+        .note { max-width: 75ch; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Project Shift – samostatný simulátor</h1>
+    <p class="note">Simulátor nevyužívá DOM, animace ani produkční stav hry. Výsledky jsou deterministické pro stejný seed.</p>
+    <form id="simulation-form">
+        <label>Počet her <input name="games" type="number" min="1" max="100000" value="1000"></label>
+        <label>Seed <input name="seed" type="number" value="12345"></label>
+        <label>Hráč 1 <select name="player1"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
+        <label>Hráč 2 <select name="player2"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
+        <label>Velikost desky <input name="boardSize" type="number" min="3" max="10" value="5"></label>
+        <label>Typy kamenů <input name="symbolCount" type="number" min="3" max="30" value="10"></label>
+        <label>Délka fronty <input name="queueSize" type="number" min="1" max="10" value="2"></label>
+        <label>Počáteční body <input name="startingScore" type="number" min="1" max="30" value="7"></label>
+        <label>Max. tahů <input name="maxTurns" type="number" min="10" value="200"></label>
+        <label>Limit tahů bez bodu <input name="noScoreTurnLimit" type="number" min="5" value="50"></label>
+        <label class="check"><input name="sharedQueueEnabled" type="checkbox"> Společná fronta</label>
+        <label class="check"><input name="topInsertionEnabled" type="checkbox" checked> Vkládání shora</label>
+        <label class="check"><input name="bottomInsertionEnabled" type="checkbox"> Vkládání odspodu</label>
+        <div class="actions">
+            <button id="run-button" type="button">Spustit experiment</button>
+            <button id="compare-button" type="button">Porovnat 6–12 symbolů</button>
+        </div>
+    </form>
+    <h2>Výsledek</h2>
+    <pre id="output">Zatím nebyl spuštěn žádný experiment.</pre>
+</main>
+<script type="module" src="./runner.js"></script>
+</body>
+</html>

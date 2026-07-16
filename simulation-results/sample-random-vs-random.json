@@ -1,0 +1,60 @@
+{
+  "experiment": {
+    "games": 100,
+    "seed": 12345,
+    "config": {
+      "boardSize": 5,
+      "symbolCount": 10,
+      "queueSize": 2,
+      "startingScore": 7,
+      "sharedQueueEnabled": false,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "maxTurns": 200,
+      "noScoreTurnLimit": 50,
+      "repetitionLimit": 3
+    },
+    "players": [
+      "Random",
+      "Random"
+    ]
+  },
+  "summary": {
+    "games": 100,
+    "winnerCounts": {
+      "player1": 4,
+      "player2": 4,
+      "unresolved": 92
+    },
+    "firstPlayerWinRate": 0.04,
+    "endReasons": {
+      "no_score_limit": 42,
+      "max_turns": 50,
+      "all_tokens_captured": 8
+    },
+    "turns": {
+      "average": 154.75,
+      "median": 199,
+      "p90": 200,
+      "p99": 200,
+      "maximum": 200
+    },
+    "longestNoScoreSequence": {
+      "average": 41.68,
+      "p90": 50,
+      "maximum": 50
+    },
+    "averagesPerGame": {
+      "totalReward": 9.76,
+      "scoringTurns": 8.92,
+      "cascades": 0.27,
+      "clearedTiles": 28.66,
+      "ejectedTiles": 127.01
+    },
+    "matchGroupsByLength": {
+      "3": 911,
+      "4": 32,
+      "5": 1
+    }
+  }
+}
