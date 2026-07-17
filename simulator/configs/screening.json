@@ -1,0 +1,28 @@
+{
+  "seed": 12345,
+  "gamesPerOrder": 50,
+  "resume": true,
+  "includeMirrors": true,
+  "agentSet": "core",
+  "agentIds": ["aggressive", "blocker", "builder", "balanced", "opportunist", "human-like"],
+  "matrix": {
+    "boardSizes": [4, 5, 6],
+    "symbolCounts": [6, 7, 8, 9, 10, 11, 12],
+    "queueSizes": [1, 2, 3],
+    "sharedQueueModes": [false, true],
+    "topInsertionModes": [true],
+    "bottomInsertionModes": [false, true],
+    "startingScores": [7],
+    "baseConfig": {
+      "maxTurns": 200,
+      "noScoreTurnLimit": 50,
+      "repetitionLimit": 3
+    }
+  },
+  "filters": {
+    "maxAverageUnresolvedRate": 0.6,
+    "maxAverageTurns": 180,
+    "maxFirstPlayerDeviation": 0.35
+  },
+  "outputDir": "../simulation-results/balance-lab-screening"
+}

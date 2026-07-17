@@ -42,3 +42,60 @@ Každý tah se navíc hodnotí podle okamžitého výsledku všech legálních m
 - průměrnou okamžitou ztrátu (`regret`) proti nejlepšímu dostupnému tahu.
 
 Jde o taktickou metriku jednoho tahu. Neříká, který tah je strategicky nejlepší několik tahů dopředu. Pro tento účel bude později sloužit MCTS.
+
+---
+
+# Game Balance Lab – parametrické ligy
+
+Tato verze přidává nad původní headless engine samostatnou vrstvu pro automatické testování pravidel.
+Produkční soubory hry se nemění.
+
+## Nové části
+
+- `agent-profiles.js` – základní archetypy a generátor 20 profilů (DNA agentů).
+- `parametric-agent.js` – jednotná hodnoticí funkce s nastavitelnými vahami.
+- `position-evaluation.js` – okamžitý zisk, soupeřova odpověď a jednoduchý poziční potenciál.
+- `agent-registry.js` – registr starých i nových agentů.
+- `league.js` – round-robin liga, střídání pořadí a interní Elo.
+- `experiment-matrix.js` – automatické kombinování desek, symbolů, front a směrů.
+- `batch-runner.js` – dávkový běh, ukládání výsledků a pokračování po přerušení.
+- `configs/*.json` – experimenty se nastavují bez úprav JavaScriptu.
+
+## Bezpečný první test
+
+V terminálu otevři složku `simulator` a spusť:
+
+```bash
+npm test
+node batch-runner.js ./configs/smoke-test.json
+```
+
+Výsledky vzniknou v:
+
+```text
+simulation-results/balance-lab-smoke/
+```
+
+## Široký screening
+
+```bash
+npm run league
+```
+
+Konfigurace je v `configs/screening.json`. Tento běh je velký. Před spuštěním doporučujeme snížit `gamesPerOrder` na 5–10 a ověřit výkon počítače.
+
+## Kandidátní test 7–9 symbolů a 20 agentů
+
+```bash
+npm run candidates
+```
+
+Tento běh je výrazně náročnější. Konfigurace je v `configs/candidates-7-9.json`.
+
+## Checkpointy
+
+Každá konfigurace se ukládá jako samostatný JSON do `runs/`. Při dalším spuštění s `"resume": true` se již dokončené konfigurace přeskočí.
+
+## Omezení této verze
+
+Poziční potenciál je první, záměrně jednoduchá heuristika. Počítá sousední dvojice a téměř hotové trojice. Není to MCTS ani důkaz zábavnosti. Slouží k vytvoření rozdílných herních stylů a k odhalování dominance nebo patových matchupů.

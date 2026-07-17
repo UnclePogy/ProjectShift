@@ -1,0 +1,441 @@
+{
+  "id": "config-0002",
+  "config": {
+    "maxTurns": 30,
+    "noScoreTurnLimit": 15,
+    "repetitionLimit": 3,
+    "boardSize": 5,
+    "symbolCount": 7,
+    "queueSize": 2,
+    "sharedQueueEnabled": true,
+    "topInsertionEnabled": true,
+    "bottomInsertionEnabled": false,
+    "startingScore": 7
+  },
+  "screening": {
+    "passed": false,
+    "reasons": [
+      "first_player_imbalance"
+    ],
+    "metrics": {
+      "averageUnresolved": 0.4166666666666667,
+      "averageTurns": 18.583333333333332,
+      "maxFirstPlayerDeviation": 0.5
+    }
+  },
+  "league": {
+    "config": {
+      "boardSize": 5,
+      "symbolCount": 7,
+      "queueSize": 2,
+      "startingScore": 7,
+      "sharedQueueEnabled": true,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "maxTurns": 30,
+      "noScoreTurnLimit": 15,
+      "repetitionLimit": 3
+    },
+    "gamesPerOrder": 2,
+    "matchups": [
+      {
+        "player1": "aggressive",
+        "player2": "balanced",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 1,
+            "player2": 0,
+            "unresolved": 1
+          },
+          "resolvedGames": 1,
+          "unresolvedRate": 0.5,
+          "firstPlayerWinRate": 0.5,
+          "firstPlayerWinRateResolved": 1,
+          "endReasons": {
+            "all_tokens_captured": 1,
+            "max_turns": 1
+          },
+          "turns": {
+            "average": 25.5,
+            "median": 21,
+            "p90": 30,
+            "p99": 30,
+            "maximum": 30,
+            "averageResolved": 21,
+            "averageUnresolved": 30
+          },
+          "longestNoScoreSequence": {
+            "average": 10,
+            "p90": 13,
+            "maximum": 13
+          },
+          "averagesPerGame": {
+            "totalReward": 6.5,
+            "scoringTurns": 5.5,
+            "cascades": 0.5,
+            "clearedTiles": 19.5,
+            "ejectedTiles": 10
+          },
+          "decisionQuality": {
+            "analyzedTurns": 51,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 0.7647058823529411,
+            "scoringMoveShare": 0.050980392156862744,
+            "averageZeroRewardMoves": 14.235294117647058,
+            "zeroRewardMoveShare": 0.9490196078431372,
+            "averageWinningMoves": 0.0196078431372549,
+            "averageBestMoveCount": 10.72549019607843,
+            "averageNearBestMoveCount": 14.490196078431373,
+            "averageDistinctRewardValues": 1.3725490196078431,
+            "averageRewardAcrossAvailableMoves": 0.053594771241830055,
+            "averageBestAvailableReward": 0.37254901960784315,
+            "averageChosenReward": 0.2549019607843137,
+            "chosenBestImmediateRate": 0.8823529411764706,
+            "chosenScoringRate": 0.21568627450980393,
+            "zeroRewardChosenRate": 0.7843137254901961,
+            "averageImmediateRegret": 0.11764705882352941,
+            "maximumImmediateRegret": 2
+          },
+          "matchGroupsByLength": {
+            "3": 13
+          }
+        }
+      },
+      {
+        "player1": "balanced",
+        "player2": "aggressive",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 0,
+            "player2": 2,
+            "unresolved": 0
+          },
+          "resolvedGames": 2,
+          "unresolvedRate": 0,
+          "firstPlayerWinRate": 0,
+          "firstPlayerWinRateResolved": 0,
+          "endReasons": {
+            "all_tokens_captured": 2
+          },
+          "turns": {
+            "average": 24,
+            "median": 18,
+            "p90": 30,
+            "p99": 30,
+            "maximum": 30,
+            "averageResolved": 24,
+            "averageUnresolved": 0
+          },
+          "longestNoScoreSequence": {
+            "average": 6,
+            "p90": 7,
+            "maximum": 7
+          },
+          "averagesPerGame": {
+            "totalReward": 8,
+            "scoringTurns": 6,
+            "cascades": 0.5,
+            "clearedTiles": 21.5,
+            "ejectedTiles": 8.5
+          },
+          "decisionQuality": {
+            "analyzedTurns": 48,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 1.125,
+            "scoringMoveShare": 0.075,
+            "averageZeroRewardMoves": 13.875,
+            "zeroRewardMoveShare": 0.925,
+            "averageWinningMoves": 0.14583333333333334,
+            "averageBestMoveCount": 8.375,
+            "averageNearBestMoveCount": 13.5625,
+            "averageDistinctRewardValues": 1.6041666666666667,
+            "averageRewardAcrossAvailableMoves": 0.08888888888888889,
+            "averageBestAvailableReward": 0.6458333333333334,
+            "averageChosenReward": 0.3541666666666667,
+            "chosenBestImmediateRate": 0.75,
+            "chosenScoringRate": 0.25,
+            "zeroRewardChosenRate": 0.75,
+            "averageImmediateRegret": 0.2916666666666667,
+            "maximumImmediateRegret": 3
+          },
+          "matchGroupsByLength": {
+            "3": 9,
+            "4": 4
+          }
+        }
+      },
+      {
+        "player1": "aggressive",
+        "player2": "builder",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 2,
+            "player2": 0,
+            "unresolved": 0
+          },
+          "resolvedGames": 2,
+          "unresolvedRate": 0,
+          "firstPlayerWinRate": 1,
+          "firstPlayerWinRateResolved": 1,
+          "endReasons": {
+            "all_tokens_captured": 2
+          },
+          "turns": {
+            "average": 14,
+            "median": 13,
+            "p90": 15,
+            "p99": 15,
+            "maximum": 15,
+            "averageResolved": 14,
+            "averageUnresolved": 0
+          },
+          "longestNoScoreSequence": {
+            "average": 4,
+            "p90": 5,
+            "maximum": 5
+          },
+          "averagesPerGame": {
+            "totalReward": 7,
+            "scoringTurns": 5.5,
+            "cascades": 1,
+            "clearedTiles": 20,
+            "ejectedTiles": 4
+          },
+          "decisionQuality": {
+            "analyzedTurns": 28,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 1.0357142857142858,
+            "scoringMoveShare": 0.06904761904761905,
+            "averageZeroRewardMoves": 13.964285714285714,
+            "zeroRewardMoveShare": 0.930952380952381,
+            "averageWinningMoves": 0.10714285714285714,
+            "averageBestMoveCount": 7.357142857142857,
+            "averageNearBestMoveCount": 13.607142857142858,
+            "averageDistinctRewardValues": 1.6428571428571428,
+            "averageRewardAcrossAvailableMoves": 0.07619047619047618,
+            "averageBestAvailableReward": 0.6785714285714286,
+            "averageChosenReward": 0.5,
+            "chosenBestImmediateRate": 0.8214285714285714,
+            "chosenScoringRate": 0.39285714285714285,
+            "zeroRewardChosenRate": 0.6071428571428571,
+            "averageImmediateRegret": 0.17857142857142858,
+            "maximumImmediateRegret": 2
+          },
+          "matchGroupsByLength": {
+            "3": 12,
+            "4": 1
+          }
+        }
+      },
+      {
+        "player1": "builder",
+        "player2": "aggressive",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 0,
+            "player2": 2,
+            "unresolved": 0
+          },
+          "resolvedGames": 2,
+          "unresolvedRate": 0,
+          "firstPlayerWinRate": 0,
+          "firstPlayerWinRateResolved": 0,
+          "endReasons": {
+            "all_tokens_captured": 2
+          },
+          "turns": {
+            "average": 18,
+            "median": 16,
+            "p90": 20,
+            "p99": 20,
+            "maximum": 20,
+            "averageResolved": 18,
+            "averageUnresolved": 0
+          },
+          "longestNoScoreSequence": {
+            "average": 6,
+            "p90": 7,
+            "maximum": 7
+          },
+          "averagesPerGame": {
+            "totalReward": 7,
+            "scoringTurns": 5.5,
+            "cascades": 0.5,
+            "clearedTiles": 19.5,
+            "ejectedTiles": 8.5
+          },
+          "decisionQuality": {
+            "analyzedTurns": 36,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 2.0833333333333335,
+            "scoringMoveShare": 0.1388888888888889,
+            "averageZeroRewardMoves": 12.916666666666666,
+            "zeroRewardMoveShare": 0.8611111111111112,
+            "averageWinningMoves": 0.16666666666666666,
+            "averageBestMoveCount": 6.027777777777778,
+            "averageNearBestMoveCount": 12.194444444444445,
+            "averageDistinctRewardValues": 1.9444444444444444,
+            "averageRewardAcrossAvailableMoves": 0.1592592592592593,
+            "averageBestAvailableReward": 0.9444444444444444,
+            "averageChosenReward": 0.4166666666666667,
+            "chosenBestImmediateRate": 0.6111111111111112,
+            "chosenScoringRate": 0.3055555555555556,
+            "zeroRewardChosenRate": 0.6944444444444444,
+            "averageImmediateRegret": 0.5277777777777778,
+            "maximumImmediateRegret": 4
+          },
+          "matchGroupsByLength": {
+            "3": 9,
+            "4": 3
+          }
+        }
+      },
+      {
+        "player1": "balanced",
+        "player2": "builder",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 0,
+            "player2": 0,
+            "unresolved": 2
+          },
+          "resolvedGames": 0,
+          "unresolvedRate": 1,
+          "firstPlayerWinRate": 0,
+          "firstPlayerWinRateResolved": 0,
+          "endReasons": {
+            "no_score_limit": 2
+          },
+          "turns": {
+            "average": 15,
+            "median": 15,
+            "p90": 15,
+            "p99": 15,
+            "maximum": 15,
+            "averageResolved": 0,
+            "averageUnresolved": 15
+          },
+          "longestNoScoreSequence": {
+            "average": 15,
+            "p90": 15,
+            "maximum": 15
+          },
+          "averagesPerGame": {
+            "totalReward": 0,
+            "scoringTurns": 0,
+            "cascades": 0,
+            "clearedTiles": 0,
+            "ejectedTiles": 15
+          },
+          "decisionQuality": {
+            "analyzedTurns": 30,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 2.3,
+            "scoringMoveShare": 0.15333333333333332,
+            "averageZeroRewardMoves": 12.7,
+            "zeroRewardMoveShare": 0.8466666666666667,
+            "averageWinningMoves": 0,
+            "averageBestMoveCount": 6.133333333333334,
+            "averageNearBestMoveCount": 12.966666666666667,
+            "averageDistinctRewardValues": 1.9,
+            "averageRewardAcrossAvailableMoves": 0.1733333333333333,
+            "averageBestAvailableReward": 0.9,
+            "averageChosenReward": 0,
+            "chosenBestImmediateRate": 0.3,
+            "chosenScoringRate": 0,
+            "zeroRewardChosenRate": 1,
+            "averageImmediateRegret": 0.9,
+            "maximumImmediateRegret": 4
+          },
+          "matchGroupsByLength": {}
+        }
+      },
+      {
+        "player1": "builder",
+        "player2": "balanced",
+        "games": 2,
+        "summary": {
+          "games": 2,
+          "winnerCounts": {
+            "player1": 0,
+            "player2": 0,
+            "unresolved": 2
+          },
+          "resolvedGames": 0,
+          "unresolvedRate": 1,
+          "firstPlayerWinRate": 0,
+          "firstPlayerWinRateResolved": 0,
+          "endReasons": {
+            "no_score_limit": 2
+          },
+          "turns": {
+            "average": 15,
+            "median": 15,
+            "p90": 15,
+            "p99": 15,
+            "maximum": 15,
+            "averageResolved": 0,
+            "averageUnresolved": 15
+          },
+          "longestNoScoreSequence": {
+            "average": 15,
+            "p90": 15,
+            "maximum": 15
+          },
+          "averagesPerGame": {
+            "totalReward": 0,
+            "scoringTurns": 0,
+            "cascades": 0,
+            "clearedTiles": 0,
+            "ejectedTiles": 15
+          },
+          "decisionQuality": {
+            "analyzedTurns": 30,
+            "averageLegalMoves": 15,
+            "averageScoringMoves": 2.9,
+            "scoringMoveShare": 0.19333333333333333,
+            "averageZeroRewardMoves": 12.1,
+            "zeroRewardMoveShare": 0.8066666666666666,
+            "averageWinningMoves": 0,
+            "averageBestMoveCount": 4,
+            "averageNearBestMoveCount": 11.8,
+            "averageDistinctRewardValues": 2.1666666666666665,
+            "averageRewardAcrossAvailableMoves": 0.22,
+            "averageBestAvailableReward": 1.1666666666666667,
+            "averageChosenReward": 0,
+            "chosenBestImmediateRate": 0.13333333333333333,
+            "chosenScoringRate": 0,
+            "zeroRewardChosenRate": 1,
+            "averageImmediateRegret": 1.1666666666666667,
+            "maximumImmediateRegret": 4
+          },
+          "matchGroupsByLength": {}
+        }
+      }
+    ],
+    "ranking": [
+      {
+        "agentId": "aggressive",
+        "elo": 1572
+      },
+      {
+        "agentId": "balanced",
+        "elo": 1466
+      },
+      {
+        "agentId": "builder",
+        "elo": 1462
+      }
+    ]
+  }
+}

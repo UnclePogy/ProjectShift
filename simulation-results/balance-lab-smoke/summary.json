@@ -1,0 +1,155 @@
+[
+  {
+    "id": "config-0001",
+    "config": {
+      "maxTurns": 30,
+      "noScoreTurnLimit": 15,
+      "repetitionLimit": 3,
+      "boardSize": 5,
+      "symbolCount": 7,
+      "queueSize": 2,
+      "sharedQueueEnabled": false,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "startingScore": 7
+    },
+    "passed": false,
+    "reasons": [
+      "first_player_imbalance"
+    ],
+    "metrics": {
+      "averageUnresolved": 0.3333333333333333,
+      "averageTurns": 22,
+      "maxFirstPlayerDeviation": 0.5
+    },
+    "ranking": [
+      {
+        "agentId": "aggressive",
+        "elo": 1581
+      },
+      {
+        "agentId": "builder",
+        "elo": 1461
+      },
+      {
+        "agentId": "balanced",
+        "elo": 1457
+      }
+    ]
+  },
+  {
+    "id": "config-0002",
+    "config": {
+      "maxTurns": 30,
+      "noScoreTurnLimit": 15,
+      "repetitionLimit": 3,
+      "boardSize": 5,
+      "symbolCount": 7,
+      "queueSize": 2,
+      "sharedQueueEnabled": true,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "startingScore": 7
+    },
+    "passed": false,
+    "reasons": [
+      "first_player_imbalance"
+    ],
+    "metrics": {
+      "averageUnresolved": 0.4166666666666667,
+      "averageTurns": 18.583333333333332,
+      "maxFirstPlayerDeviation": 0.5
+    },
+    "ranking": [
+      {
+        "agentId": "aggressive",
+        "elo": 1572
+      },
+      {
+        "agentId": "balanced",
+        "elo": 1466
+      },
+      {
+        "agentId": "builder",
+        "elo": 1462
+      }
+    ]
+  },
+  {
+    "id": "config-0003",
+    "config": {
+      "maxTurns": 30,
+      "noScoreTurnLimit": 15,
+      "repetitionLimit": 3,
+      "boardSize": 5,
+      "symbolCount": 8,
+      "queueSize": 2,
+      "sharedQueueEnabled": false,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "startingScore": 7
+    },
+    "passed": false,
+    "reasons": [
+      "too_many_unresolved_games",
+      "first_player_imbalance"
+    ],
+    "metrics": {
+      "averageUnresolved": 0.6666666666666666,
+      "averageTurns": 22.333333333333332,
+      "maxFirstPlayerDeviation": 0.5
+    },
+    "ranking": [
+      {
+        "agentId": "aggressive",
+        "elo": 1541
+      },
+      {
+        "agentId": "balanced",
+        "elo": 1487
+      },
+      {
+        "agentId": "builder",
+        "elo": 1472
+      }
+    ]
+  },
+  {
+    "id": "config-0004",
+    "config": {
+      "maxTurns": 30,
+      "noScoreTurnLimit": 15,
+      "repetitionLimit": 3,
+      "boardSize": 5,
+      "symbolCount": 8,
+      "queueSize": 2,
+      "sharedQueueEnabled": true,
+      "topInsertionEnabled": true,
+      "bottomInsertionEnabled": false,
+      "startingScore": 7
+    },
+    "passed": false,
+    "reasons": [
+      "first_player_imbalance"
+    ],
+    "metrics": {
+      "averageUnresolved": 0.5,
+      "averageTurns": 24.666666666666668,
+      "maxFirstPlayerDeviation": 0.5
+    },
+    "ranking": [
+      {
+        "agentId": "aggressive",
+        "elo": 1561
+      },
+      {
+        "agentId": "builder",
+        "elo": 1471
+      },
+      {
+        "agentId": "balanced",
+        "elo": 1468
+      }
+    ]
+  }
+]

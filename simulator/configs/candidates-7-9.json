@@ -1,0 +1,35 @@
+{
+  "seed": 22345,
+  "gamesPerOrder": 250,
+  "resume": true,
+  "includeMirrors": true,
+  "agentSet": "population20",
+  "perFamily": 4,
+  "agentIds": [
+    "aggressive-01", "aggressive-02", "aggressive-03", "aggressive-04",
+    "defensive-01", "defensive-02", "defensive-03", "defensive-04",
+    "builder-01", "builder-02", "builder-03", "builder-04",
+    "balanced-01", "balanced-02", "balanced-03", "balanced-04",
+    "human-01", "human-02", "human-03", "human-04"
+  ],
+  "matrix": {
+    "boardSizes": [5],
+    "symbolCounts": [7, 8, 9],
+    "queueSizes": [2, 3],
+    "sharedQueueModes": [false, true],
+    "topInsertionModes": [true],
+    "bottomInsertionModes": [false, true],
+    "startingScores": [7],
+    "baseConfig": {
+      "maxTurns": 200,
+      "noScoreTurnLimit": 50,
+      "repetitionLimit": 3
+    }
+  },
+  "filters": {
+    "maxAverageUnresolvedRate": 0.4,
+    "maxAverageTurns": 160,
+    "maxFirstPlayerDeviation": 0.25
+  },
+  "outputDir": "../simulation-results/balance-lab-candidates"
+}
