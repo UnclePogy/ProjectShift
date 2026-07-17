@@ -3,7 +3,7 @@ import { createSeededRandom } from "../random.js";
 import { createInitialState } from "../engine.js";
 import { createParametricAgent } from "../parametric-agent.js";
 import { CORE_AGENT_PROFILES, generateAgentPopulation } from "../agent-profiles.js";
-import { buildExperimentMatrix } from "../experiment-matrix.js";
+import { buildExperimentMatrix, applyScreeningFilters } from "../experiment-matrix.js";
 import { runLeague } from "../league.js";
 
 const population = generateAgentPopulation({ perFamily: 4 });
@@ -35,3 +35,13 @@ assert.equal(league.matchups.length, 2);
 assert.equal(league.ranking.length, 2);
 
 console.log("Balance Lab tests: OK");
+
+const syntheticLeague = {
+    matchups: [
+        { summary: { games: 2, resolvedGames: 2, unresolvedRate: 0, winnerCounts: { player1: 2, player2: 0, unresolved: 0 }, turns: { average: 50 } } },
+        { summary: { games: 2, resolvedGames: 2, unresolvedRate: 0, winnerCounts: { player1: 0, player2: 2, unresolved: 0 }, turns: { average: 70 } } }
+    ]
+};
+const screening = applyScreeningFilters(syntheticLeague, { maxFirstPlayerDeviation: 0.25 });
+assert.equal(screening.passed, true);
+assert.equal(screening.metrics.firstPlayerWinRateResolved, 0.5);

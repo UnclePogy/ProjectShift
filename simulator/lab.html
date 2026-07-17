@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Project Shift – Game Balance Lab</title>
+  <link rel="stylesheet" href="./lab.css">
+</head>
+<body>
+  <main class="shell">
+    <header><p class="eyebrow">PROJECT SHIFT</p><h1>Game Balance Lab</h1><p>Automatické ligy agentů napříč konfiguracemi hry. Bez zásahu do produkční hry.</p></header>
+
+    <section class="panel presets">
+      <h2>1. Vyber režim</h2>
+      <div class="button-row"><button id="presetQuick">Rychlá kontrola</button><button id="presetScreening">Široké hledání</button><button id="presetCandidates">Přesně 7–9 kamenů</button></div>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <h2>2. Nastavení hry</h2>
+        <fieldset><legend>Deska</legend><label class="chip"><input type="checkbox" name="boardSizes" value="4">4×4</label><label class="chip"><input type="checkbox" name="boardSizes" value="5" checked>5×5</label><label class="chip"><input type="checkbox" name="boardSizes" value="6">6×6</label></fieldset>
+        <fieldset><legend>Typy kamenů</legend><div class="chips"><label class="chip"><input type="checkbox" name="symbolCounts" value="6" >6</label><label class="chip"><input type="checkbox" name="symbolCounts" value="7" >7</label><label class="chip"><input type="checkbox" name="symbolCounts" value="8" checked>8</label><label class="chip"><input type="checkbox" name="symbolCounts" value="9" >9</label><label class="chip"><input type="checkbox" name="symbolCounts" value="10" >10</label><label class="chip"><input type="checkbox" name="symbolCounts" value="11" >11</label><label class="chip"><input type="checkbox" name="symbolCounts" value="12" >12</label></div></fieldset>
+        <fieldset><legend>Fronta</legend><label class="chip"><input type="checkbox" name="queueSizes" value="1">1</label><label class="chip"><input type="checkbox" name="queueSizes" value="2" checked>2</label><label class="chip"><input type="checkbox" name="queueSizes" value="3">3</label></fieldset>
+        <fieldset><legend>Režim fronty</legend><label class="chip"><input type="checkbox" name="sharedQueueModes" value="false" checked>Oddělená</label><label class="chip"><input type="checkbox" name="sharedQueueModes" value="true">Společná</label></fieldset>
+        <fieldset><legend>Vkládání</legend><label class="switch"><input id="topInsertion" type="checkbox" checked> Shora</label><label class="chip"><input type="checkbox" name="bottomInsertionModes" value="false" checked>Bez spodního</label><label class="chip"><input type="checkbox" name="bottomInsertionModes" value="true">Se spodním</label></fieldset>
+        <fieldset><legend>Počáteční body</legend><label class="chip"><input type="checkbox" name="startingScores" value="5">5</label><label class="chip"><input type="checkbox" name="startingScores" value="7" checked>7</label><label class="chip"><input type="checkbox" name="startingScores" value="9">9</label></fieldset>
+      </article>
+
+      <article class="panel">
+        <h2>3. Agenti a náročnost</h2>
+        <label class="field">Sada agentů<select id="agentSet"><option value="core">6 odlišných agentů</option><option value="population20">Populace 20 agentů</option></select></label>
+        <div id="coreAgents" class="chips"></div>
+        <div id="populationOptions" hidden><label class="field">Agentů v každé rodině<input id="perFamily" type="number" min="1" max="10" value="4"></label><p class="muted">5 rodin × 4 varianty = 20 agentů.</p></div>
+        <label class="switch"><input id="includeMirrors" type="checkbox"> Stejní agenti proti sobě</label>
+        <label class="field">Partií na jedno pořadí<input id="gamesPerOrder" type="number" min="1" max="10000" value="2"></label>
+        <label class="field">Seed<input id="seed" type="number" value="12345"></label>
+        <details><summary>Technické limity</summary><label class="field">Max. tahů<input id="maxTurns" type="number" value="200"></label><label class="field">Limit bez bodu<input id="noScoreLimit" type="number" value="50"></label><label class="field">Opakování stavu<input id="repetitionLimit" type="number" value="3"></label></details>
+        <details><summary>Filtry výsledků</summary><label class="field">Max. nedokončených (%)<input id="maxUnresolved" type="number" value="40"></label><label class="field">Max. průměr tahů<input id="filterMaxTurns" type="number" value="160"></label><label class="field">Max. odchylka P1 (%)<input id="maxP1Deviation" type="number" value="25"></label></details>
+      </article>
+    </section>
+
+    <section class="panel run-panel">
+      <h2>4. Spuštění</h2><p id="estimate"></p><p id="warning" class="warning"></p>
+      <div class="button-row"><button id="startBtn" class="primary">Spustit test</button><button id="pauseBtn" disabled>Pozastavit</button><button id="stopBtn" disabled>Zastavit</button></div>
+      <progress id="progress" max="100" value="0"></progress><div class="status-row"><span id="status">Připraveno</span><span id="progressText"></span></div>
+    </section>
+
+    <section class="panel results">
+      <div class="results-head"><div><h2>5. Výsledky</h2><p id="resultCount" class="muted">0 dokončených konfigurací</p></div><div class="button-row"><button id="exportJson" disabled>Export JSON</button><button id="exportCsv" disabled>Export CSV</button><button id="clearResults">Vymazat</button></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Deska</th><th>Kameny</th><th>Fronta</th><th>Režim</th><th>Spodek</th><th>Nedokončeno</th><th>Tahy</th><th>Kaskády</th><th>Výhry P1<br><small>z dokončených</small></th><th>Bodující tahy</th><th>Filtr</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+    </section>
+  </main>
+  <script type="module" src="./lab.js"></script>
+</body>
+</html>

@@ -99,3 +99,11 @@ Každá konfigurace se ukládá jako samostatný JSON do `runs/`. Při dalším 
 ## Omezení této verze
 
 Poziční potenciál je první, záměrně jednoduchá heuristika. Počítá sousední dvojice a téměř hotové trojice. Není to MCTS ani důkaz zábavnosti. Slouží k vytvoření rozdílných herních stylů a k odhalování dominance nebo patových matchupů.
+
+## Grafické ovládání Balance Lab v2
+
+Spusť projekt přes Live Server a otevři:
+
+`/simulator/lab.html`
+
+Všechny běžné experimenty lze nastavit a spustit bez Terminálu a bez úpravy JSON. Výpočty běží ve Web Workeru, takže stránka zůstává ovladatelná. Průběžně dokončené konfigurace se ukládají do localStorage prohlížeče. Výsledky lze exportovat jako JSON nebo CSV.
