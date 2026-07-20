@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/engine.test.js && node tests/decision-analysis.test.js && node tests/balance-lab.test.js",
+    "test": "node tests/engine.test.js && node tests/decision-analysis.test.js && node tests/balance-lab.test.js && node tests/balance-score.test.js",
     "simulate": "node cli.js",
     "league": "node batch-runner.js ./configs/screening.json",
     "candidates": "node batch-runner.js ./configs/candidates-7-9.json"

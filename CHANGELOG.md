@@ -100,3 +100,14 @@ V tomto souboru jsou zaznamenány významné změny projektu Project Shift.
 - První hrací plocha 5×5.
 - Původní posun řádků a sloupců.
 - První projektová dokumentace.
+
+## Balance Lab – Balance Score
+
+- Přidáno automatické Balance Score pro porovnání konfigurací.
+- Výchozí váhy: 50 % nedokončené hry, 30 % délka partie, 20 % férovost prvního hráče.
+- Přidáno nastavitelné cílové trvání partie a penalizace za odchylku.
+- Výsledky se automaticky řadí od nejlepší konfigurace.
+- Přidána karta s doporučenou konfigurací, náskokem a rozkladem skóre.
+- Nastavení skóre se ukládá v prohlížeči.
+- CSV export obsahuje pořadí a Balance Score.
+- Přidány automatické testy výpočtu skóre.

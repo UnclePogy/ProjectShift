@@ -107,3 +107,13 @@ Spusť projekt přes Live Server a otevři:
 `/simulator/lab.html`
 
 Všechny běžné experimenty lze nastavit a spustit bez Terminálu a bez úpravy JSON. Výpočty běží ve Web Workeru, takže stránka zůstává ovladatelná. Průběžně dokončené konfigurace se ukládají do localStorage prohlížeče. Výsledky lze exportovat jako JSON nebo CSV.
+
+## Balance Score
+
+Browserový Game Balance Lab automaticky hodnotí dokončené konfigurace. Výchozí skóre používá:
+
+- 50 %: podíl dokončených her,
+- 30 %: vzdálenost od cílového počtu tahů,
+- 20 %: odchylku úspěšnosti prvního hráče od 50 %.
+
+Váhy, cílový počet tahů a penalizaci lze změnit přímo v panelu Balance Score. Hodnoty se ukládají lokálně v prohlížeči a váhy se při výpočtu normalizují.

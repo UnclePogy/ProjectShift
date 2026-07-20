@@ -1,3 +1,4 @@
+import { rankBalanceResults } from './balance-score.js';
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -10,6 +11,32 @@ const FAMILIES = ['aggressive', 'defensive', 'builder', 'balanced', 'human'];
 let worker = null;
 let latestResults = [];
 let running = false;
+
+function getBalanceScoreConfig() {
+  return {
+    unresolvedWeight: Number($('#scoreUnresolvedWeight').value) / 100,
+    lengthWeight: Number($('#scoreLengthWeight').value) / 100,
+    fairnessWeight: Number($('#scoreFairnessWeight').value) / 100,
+    targetTurns: Number($('#scoreTargetTurns').value),
+    pointsLostPerTurn: Number($('#scoreTurnPenalty').value)
+  };
+}
+
+function saveBalanceScoreConfig() {
+  localStorage.setItem('projectShiftBalanceScoreConfig', JSON.stringify(getBalanceScoreConfig()));
+}
+
+function restoreBalanceScoreConfig() {
+  try {
+    const config = JSON.parse(localStorage.getItem('projectShiftBalanceScoreConfig'));
+    if (!config) return;
+    $('#scoreUnresolvedWeight').value = Math.round((config.unresolvedWeight ?? 0.5) * 100);
+    $('#scoreLengthWeight').value = Math.round((config.lengthWeight ?? 0.3) * 100);
+    $('#scoreFairnessWeight').value = Math.round((config.fairnessWeight ?? 0.2) * 100);
+    $('#scoreTargetTurns').value = config.targetTurns ?? 70;
+    $('#scoreTurnPenalty').value = config.pointsLostPerTurn ?? 1;
+  } catch { /* ignore invalid local data */ }
+}
 
 function selectedValues(name, parser = (value) => value) {
   return $$(`input[name="${name}"]:checked`).map((input) => parser(input.value));
@@ -129,9 +156,19 @@ function startRun() {
   latestResults = [];
   renderResults([]);
   worker?.terminate();
-  worker = new Worker('./lab-worker.js', { type: 'module' });
+  const workerUrl = new URL('./lab-worker.js', import.meta.url);
+  worker = new Worker(workerUrl, { type: 'module' });
   worker.onmessage = handleWorkerMessage;
-  worker.onerror = (event) => showError(event.message);
+  worker.onerror = (event) => {
+    event.preventDefault();
+    const details = [
+      event.message || 'Worker se nepodařilo načíst.',
+      event.filename ? `Soubor: ${event.filename}` : '',
+      event.lineno ? `Řádek: ${event.lineno}` : ''
+    ].filter(Boolean).join('\n');
+    showError(details);
+  };
+  worker.onmessageerror = () => showError('Prohlížeč nedokázal přečíst zprávu ze simulátoru.');
   setRunningState(true);
   $('#status').textContent = 'Spouštím…';
   $('#progress').value = 0;
@@ -199,14 +236,57 @@ function formatFilter(result) {
   return `<span class="badge fail">neprošlo</span><div class="filter-reasons">${reasons.join('<br>')}</div>`;
 }
 
+function describeConfig(config) {
+  return `${config.boardSize}×${config.boardSize} · ${config.symbolCount} kamenů · fronta ${config.queueSize} · ${config.sharedQueueEnabled ? 'společná' : 'oddělená'}`;
+}
+
+function rankedResults(results) {
+  const entries = results.map((result) => {
+    const aggregate = aggregateConfig(result);
+    return {
+      result,
+      aggregate,
+      metrics: {
+        unresolvedRate: aggregate.unresolved,
+        averageTurns: aggregate.turns,
+        firstPlayerWinRateResolved: aggregate.p1
+      }
+    };
+  });
+  return rankBalanceResults(entries, getBalanceScoreConfig());
+}
+
+function renderRecommendation(ranked) {
+  const panel = $('#balanceSummary');
+  if (!ranked.length) {
+    panel.hidden = true;
+    return;
+  }
+
+  panel.hidden = false;
+  const best = ranked[0];
+  const second = ranked[1];
+  const lead = second ? best.balanceScore.total - second.balanceScore.total : 0;
+  const score = best.balanceScore;
+  $('#bestConfig').textContent = describeConfig(best.result.config);
+  $('#bestScore').textContent = score.total.toFixed(1);
+  $('#bestDetails').innerHTML = `Nedokončeno <strong>${(best.aggregate.unresolved * 100).toFixed(1)} %</strong> · průměr <strong>${best.aggregate.turns.toFixed(1)} tahů</strong> · P1 <strong>${best.aggregate.p1 === null ? '—' : `${(best.aggregate.p1 * 100).toFixed(1)} %`}</strong>`;
+  $('#bestLead').textContent = second
+    ? `Náskok před druhým místem: ${lead.toFixed(1)} bodu.`
+    : 'Pro srovnání spusť alespoň dvě konfigurace.';
+  $('#scoreBreakdown').textContent = `Dílčí skóre: dokončení ${score.unresolvedScore.toFixed(1)} · délka ${score.lengthScore.toFixed(1)} · férovost ${score.fairnessScore.toFixed(1)}`;
+}
+
 function renderResults(results) {
   const body = $('#resultsBody');
   body.innerHTML = '';
-  results.forEach((result) => {
-    const a = aggregateConfig(result);
+  const ranked = rankedResults(results);
+  ranked.forEach((entry, index) => {
+    const { result, aggregate: a, balanceScore } = entry;
     const c = result.config;
     const row = document.createElement('tr');
     row.innerHTML = `
+      <td><strong>${index + 1}.</strong></td><td><strong>${balanceScore.total.toFixed(1)}</strong></td>
       <td>${c.boardSize}×${c.boardSize}</td><td>${c.symbolCount}</td><td>${c.queueSize}</td>
       <td>${c.sharedQueueEnabled ? 'společná' : 'oddělená'}</td><td>${c.bottomInsertionEnabled ? 'ano' : 'ne'}</td>
       <td>${(a.unresolved * 100).toFixed(1)} %</td><td>${a.turns.toFixed(1)}</td><td>${a.cascades.toFixed(2)}</td>
@@ -214,6 +294,7 @@ function renderResults(results) {
       <td>${formatFilter(result)}</td>`;
     body.appendChild(row);
   });
+  renderRecommendation(ranked);
   $('#resultCount').textContent = `${results.length} dokončených konfigurací`;
   $('#exportJson').disabled = !results.length;
   $('#exportCsv').disabled = !results.length;
@@ -245,10 +326,10 @@ function download(filename, content, type) {
 }
 
 function exportCsv() {
-  const header = ['boardSize','symbolCount','queueSize','queueMode','bottomInsertion','unresolvedRate','averageTurns','cascades','firstPlayerWinRateResolved','chosenScoringRate','passed','filterReasons'];
-  const rows = latestResults.map((result) => {
-    const a = aggregateConfig(result); const c = result.config;
-    return [c.boardSize,c.symbolCount,c.queueSize,c.sharedQueueEnabled?'shared':'separate',c.bottomInsertionEnabled,a.unresolved,a.turns,a.cascades,a.p1 ?? '',a.scoring,result.screening.passed,result.screening.reasons.join('|')];
+  const header = ['rank','balanceScore','boardSize','symbolCount','queueSize','queueMode','bottomInsertion','unresolvedRate','averageTurns','cascades','firstPlayerWinRateResolved','chosenScoringRate','passed','filterReasons'];
+  const rows = rankedResults(latestResults).map((entry, index) => {
+    const { result, aggregate: a, balanceScore } = entry; const c = result.config;
+    return [index + 1,balanceScore.total,c.boardSize,c.symbolCount,c.queueSize,c.sharedQueueEnabled?'shared':'separate',c.bottomInsertionEnabled,a.unresolved,a.turns,a.cascades,a.p1 ?? '',a.scoring,result.screening.passed,result.screening.reasons.join('|')];
   });
   download('project-shift-balance-lab.csv', [header, ...rows].map((row) => row.join(',')).join('\n'), 'text/csv');
 }
@@ -258,6 +339,7 @@ function initializeAgents() {
 }
 
 initializeAgents();
+restoreBalanceScoreConfig();
 restoreCheckpoint();
 updateAgentMode();
 estimate();
@@ -266,7 +348,13 @@ $('#agentSet').addEventListener('change', updateAgentMode);
 $('#presetQuick').addEventListener('click', () => applyPreset('quick'));
 $('#presetScreening').addEventListener('click', () => applyPreset('screening'));
 $('#presetCandidates').addEventListener('click', () => applyPreset('candidates'));
-$('#startBtn').addEventListener('click', startRun);
+$('#startBtn').addEventListener('click', () => {
+  try {
+    startRun();
+  } catch (error) {
+    showError(error?.message || String(error));
+  }
+});
 $('#pauseBtn').addEventListener('click', () => {
   const pausedNow = $('#pauseBtn').dataset.paused === 'true';
   worker?.postMessage({ type: pausedNow ? 'resume' : 'pause' });
@@ -279,3 +367,4 @@ $('#exportJson').addEventListener('click', () => download('project-shift-balance
 $('#exportCsv').addEventListener('click', exportCsv);
 $('#clearResults').addEventListener('click', () => { latestResults = []; localStorage.removeItem('projectShiftBalanceLabResults'); renderResults([]); });
 $$('input, select').forEach((element) => element.addEventListener('change', estimate));
+$$('.score-setting').forEach((element) => element.addEventListener('change', () => { saveBalanceScoreConfig(); renderResults(latestResults); }));

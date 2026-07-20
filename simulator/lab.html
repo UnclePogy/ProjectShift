@@ -36,6 +36,7 @@
         <label class="field">Seed<input id="seed" type="number" value="12345"></label>
         <details><summary>Technické limity</summary><label class="field">Max. tahů<input id="maxTurns" type="number" value="200"></label><label class="field">Limit bez bodu<input id="noScoreLimit" type="number" value="50"></label><label class="field">Opakování stavu<input id="repetitionLimit" type="number" value="3"></label></details>
         <details><summary>Filtry výsledků</summary><label class="field">Max. nedokončených (%)<input id="maxUnresolved" type="number" value="40"></label><label class="field">Max. průměr tahů<input id="filterMaxTurns" type="number" value="160"></label><label class="field">Max. odchylka P1 (%)<input id="maxP1Deviation" type="number" value="25"></label></details>
+        <details open><summary>Balance Score</summary><p class="muted">Váhy se automaticky normalizují na 100 %.</p><label class="field">Nedokončené hry – váha (%)<input class="score-setting" id="scoreUnresolvedWeight" type="number" min="0" max="100" value="50"></label><label class="field">Délka partie – váha (%)<input class="score-setting" id="scoreLengthWeight" type="number" min="0" max="100" value="30"></label><label class="field">Férovost P1 – váha (%)<input class="score-setting" id="scoreFairnessWeight" type="number" min="0" max="100" value="20"></label><label class="field">Cílový počet tahů<input class="score-setting" id="scoreTargetTurns" type="number" min="1" value="70"></label><label class="field">Ztráta bodu za každý tah od cíle<input class="score-setting" id="scoreTurnPenalty" type="number" min="0" step="0.1" value="1"></label></details>
       </article>
     </section>
 
@@ -45,9 +46,13 @@
       <progress id="progress" max="100" value="0"></progress><div class="status-row"><span id="status">Připraveno</span><span id="progressText"></span></div>
     </section>
 
+    <section id="balanceSummary" class="panel balance-summary" hidden>
+      <p class="eyebrow">DOPORUČENÍ</p><div class="score-layout"><div><h2 id="bestConfig"></h2><p id="bestDetails"></p><p id="bestLead" class="muted"></p><p id="scoreBreakdown" class="muted"></p></div><div class="score-number"><span>Balance Score</span><strong id="bestScore">—</strong></div></div>
+    </section>
+
     <section class="panel results">
       <div class="results-head"><div><h2>5. Výsledky</h2><p id="resultCount" class="muted">0 dokončených konfigurací</p></div><div class="button-row"><button id="exportJson" disabled>Export JSON</button><button id="exportCsv" disabled>Export CSV</button><button id="clearResults">Vymazat</button></div></div>
-      <div class="table-wrap"><table><thead><tr><th>Deska</th><th>Kameny</th><th>Fronta</th><th>Režim</th><th>Spodek</th><th>Nedokončeno</th><th>Tahy</th><th>Kaskády</th><th>Výhry P1<br><small>z dokončených</small></th><th>Bodující tahy</th><th>Filtr</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Pořadí</th><th>Score</th><th>Deska</th><th>Kameny</th><th>Fronta</th><th>Režim</th><th>Spodek</th><th>Nedokončeno</th><th>Tahy</th><th>Kaskády</th><th>Výhry P1<br><small>z dokončených</small></th><th>Bodující tahy</th><th>Filtr</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
     </section>
   </main>
   <script type="module" src="./lab.js"></script>
