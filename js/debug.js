@@ -1,9 +1,9 @@
 const LAB_DEFAULTS = {
     boardSize: 5,
-    symbolCount: 10,
+    symbolCount: 8,
     queueSize: 2,
     startingScore: 7,
-    sharedQueueEnabled: false,
+    sharedQueueEnabled: true,
     animationDuration: 500,
     topInsertionEnabled: true,
     bottomInsertionEnabled: false,

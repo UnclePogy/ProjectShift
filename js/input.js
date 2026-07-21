@@ -6,11 +6,15 @@ let sharedQueue = [];
 let playerScores = [];
 let gameOver = false;
 
+const AI_PLAYER_INDEX = 1;
+const AI_MOVE_DELAY = 1200;
+let AI_ENABLED = true;
+
 const PLAYER_COUNT = 2;
 let STARTING_SCORE = 7;
 let TOTAL_SCORE_TOKENS = STARTING_SCORE * PLAYER_COUNT;
 let VISIBLE_QUEUE_SIZE = 2;
-let SHARED_QUEUE_ENABLED = false;
+let SHARED_QUEUE_ENABLED = true;
 let ANIMATION_DURATION = 500;
 let TOP_INSERTION_ENABLED = true;
 let BOTTOM_INSERTION_ENABLED = false;
@@ -249,7 +253,12 @@ function chooseDragDirection(candidates, deltaX, deltaY) {
 }
 
 function startBoardDrag(event) {
-    if (isResolvingMove || activeDrag || gameOver) return;
+    if (
+        isResolvingMove ||
+        activeDrag ||
+        gameOver ||
+        (AI_ENABLED && activePlayerIndex === AI_PLAYER_INDEX)
+    ) return;
 
     const cell = event.target.closest?.(".cell");
     if (!cell) return;
@@ -339,6 +348,93 @@ function clearTargetHighlight() {
     document.querySelectorAll(".cell--target").forEach((cell) => cell.classList.remove("cell--target"));
 }
 
+function getLegalMoves() {
+    const moves = [];
+
+    for (let index = 0; index < SIZE; index++) {
+        moves.push({ direction: "left", index });
+        moves.push({ direction: "right", index });
+
+        if (TOP_INSERTION_ENABLED) {
+            moves.push({ direction: "top", index });
+        }
+
+        if (BOTTOM_INSERTION_ENABLED) {
+            moves.push({ direction: "bottom", index });
+        }
+    }
+
+    return moves;
+}
+
+function simulateMoveReward(direction, index, incomingTile) {
+    const originalBoard = gameBoard.map((row) => [...row]);
+
+    if (direction === "left") {
+        insertRowFromLeft(index, incomingTile);
+    } else if (direction === "right") {
+        insertRowFromRight(index, incomingTile);
+    } else if (direction === "top") {
+        insertColumnFromTop(index, incomingTile);
+    } else if (direction === "bottom") {
+        insertColumnFromBottom(index, incomingTile);
+    }
+
+    applyGravity();
+    const reward = calculateMatchReward();
+
+    gameBoard = originalBoard;
+    return reward;
+}
+
+function chooseGreedyMove() {
+    const incomingTile = getCurrentIncomingTile();
+    const evaluatedMoves = getLegalMoves().map((move) => ({
+        ...move,
+        reward: simulateMoveReward(
+            move.direction,
+            move.index,
+            incomingTile
+        )
+    }));
+
+    const bestReward = Math.max(
+        ...evaluatedMoves.map((move) => move.reward)
+    );
+
+    const bestMoves = evaluatedMoves.filter(
+        (move) => move.reward === bestReward
+    );
+
+    return bestMoves[
+        Math.floor(Math.random() * bestMoves.length)
+    ];
+}
+
+function performAIMove() {
+    if (
+        !AI_ENABLED ||
+        gameOver ||
+        isResolvingMove ||
+        activePlayerIndex !== AI_PLAYER_INDEX
+    ) {
+        return;
+    }
+
+    const move = chooseGreedyMove();
+    if (!move) return;
+
+    highlightTarget(move.direction, move.index);
+
+    scheduleTimeout(() => {
+        clearTargetHighlight();
+        performInsertion(move.direction, move.index);
+    }, 700);
+}
+
+
+
+
 function performInsertion(direction, index) {
     if (isResolvingMove || gameOver) return;
     if (direction === "top" && !TOP_INSERTION_ENABLED) return;
@@ -365,8 +461,20 @@ function switchPlayer() {
 
 function completeTurn() {
     isResolvingMove = false;
-    if (!gameOver) switchPlayer();
+
+    if (gameOver) return;
+
+    switchPlayer();
+
+    if (
+        AI_ENABLED &&
+        activePlayerIndex === AI_PLAYER_INDEX
+    ) {
+        scheduleTimeout(performAIMove, AI_MOVE_DELAY);
+    }
 }
+
+
 
 function finishMoveResolution() {
     const matches = findMatches();
