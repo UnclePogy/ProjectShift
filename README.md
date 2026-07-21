@@ -1,44 +1,140 @@
 # Project Shift
 
-Project Shift je testovací prototyp tahové logické hry pro dva hráče na jedné hrací ploše. Hráči vkládají kameny z okrajů desky, vytvářejí kombinace a převádějí soupeřovy body na svou stranu.
+> **A competitive turn-based puzzle game where two players fight over the same board.**
 
-Aktuální výchozí test používá:
+Project Shift is an original competitive puzzle game built around one simple idea:
 
-- desku 5×5;
-- 10 typů kamenů;
-- dvě viditelné příchozí položky pro každého hráče;
-- vkládání zleva, zprava a shora;
-- 7 bodů na každé straně;
-- animace dlouhé 500 ms.
+**Every move changes the battlefield for both players.**
 
-Všechny tyto hodnoty jsou testovací, ne finální.
+Instead of swapping tiles like in traditional puzzle games, players insert new pieces from the edges of a shared board. Every decision changes future opportunities for both sides, creating a game focused on positioning, planning, and direct player interaction.
 
-## Spuštění
+> 🚧 **Current Status:** Early Gameplay Prototype
 
-Projekt nepoužívá sestavení ani externí knihovny. Otevři složku ve VS Code, spusť Live Server a načti `index.html`.
+---
 
-## Ovládání
+# Why Project Shift?
 
-Tah začíná na krajním kameni desky. Táhni jej směrem dovnitř a po překročení minimální vzdálenosti pusť. Krátké tažení se zruší bez změny hry.
+Most puzzle games challenge players to optimize their own board.
 
-Laboratoř umožňuje porovnávat testovací varianty. Nastavení, která mění pravidla nebo obsah hry, se použijí tlačítkem **Použít a resetovat**.
+Project Shift asks a different question:
 
-## Test na telefonu přes lokální Wi-Fi
+> **What happens when two players fight over the same puzzle?**
 
-1. Připoj Mac i telefon ke stejné Wi-Fi.
-2. Otevři projekt ve VS Code a spusť Live Server.
-3. Na telefonu otevři v Safari adresu `http://IP_ADRESA_MACU:5500`.
-4. Ověř tažení z povolených hran, čitelnost front, označení hráče na tahu a stabilitu stránky.
+Both players share a single board.
 
-Lokální IP Macu najdeš v Nastavení systému → Wi-Fi → Podrobnosti → TCP/IP.
+Every move can help you...
+or create an opportunity for your opponent.
 
-## Dokumentace
+The result is a competitive puzzle game where strategy matters more than memorizing combinations.
 
-- `docs/ProjectConstitution.md` určuje zásady projektu.
-- `docs/GDD.md` popisuje aktuální podobu hry.
-- `docs/Decisions.md` zaznamenává platná i nahrazená rozhodnutí.
-- `docs/Roadmap.md` určuje pořadí dalších fází.
-- `docs/TODO.md` obsahuje nejbližší konkrétní práci.
-- `CHANGELOG.md` eviduje provedené změny.
+---
 
-Pokud si dokumenty odporují, aktuální stav hry se nejprve ověří v kódu a rozpor se musí opravit v dokumentaci před další větší mechanikou.
+# Core Features
+
+* 🎮 Turn-based competitive gameplay
+* 🧩 One shared game board
+* ↔️ Insert pieces from the board edges
+* ⚔️ Direct player interaction every turn
+* 🏆 Capture your opponent's score tokens
+* 🔄 Cascading combinations and chain reactions
+* 🧪 Balance Lab for rapid gameplay testing
+
+---
+
+# How to Play
+
+Each turn a player inserts a new piece from the edge of the board.
+
+Creating matches captures your opponent's score tokens.
+
+The first player to capture every opponent token wins.
+
+The game is easy to learn but rewards planning several turns ahead.
+
+---
+
+# What Makes It Different?
+
+Project Shift is **not** about solving your own puzzle.
+
+Instead:
+
+* Both players use the same board.
+* Every move changes the future for both players.
+* Pieces enter from the edges instead of being swapped.
+* Positioning becomes as important as combinations.
+* Every match is a tactical battle instead of a score chase.
+
+---
+
+# Current Prototype
+
+Current gameplay includes:
+
+* 5×5 board
+* 10 symbol types
+* Match detection
+* Cascades
+* Gravity system
+* Score token capture
+* Laboratory for gameplay balancing
+* Mobile and desktop support
+* Local two-player gameplay
+
+---
+
+# Technology
+
+* HTML5
+* CSS3
+* Vanilla JavaScript
+
+No external game engine is currently used.
+
+---
+
+# Roadmap
+
+## Gameplay
+
+* Improve onboarding
+* Refine balance
+* Expand Balance Lab
+* Improve readability
+* Additional game modes
+
+## Technical
+
+* AI opponents
+* Online multiplayer
+* Save system
+* Sound effects
+* Animations polish
+
+---
+
+# Project Philosophy
+
+Project Shift follows a few simple principles:
+
+* Player interaction comes first.
+* Gameplay is more important than graphics.
+* Every mechanic must improve the player experience.
+* Easy to learn, difficult to master.
+* Original solutions over imitation.
+
+---
+
+# Development
+
+Project Shift is currently an active prototype focused on validating gameplay through rapid iteration and player testing.
+
+Feedback, suggestions and discussions are welcome.
+
+---
+
+## One Board.
+
+## Two Players.
+
+## Endless Decisions.
