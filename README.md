@@ -2,6 +2,14 @@
 
 > **A competitive turn-based puzzle game where two players fight over the same board.**
 
+🎮 **Play Online:**  
+https://unclepogy.github.io/ProjectShift/
+
+💻 **Source Code:**  
+https://github.com/UnclePogy/ProjectShift/
+
+---
+
 Project Shift is an original competitive puzzle game built around one simple idea:
 
 **Every move changes the battlefield for both players.**
