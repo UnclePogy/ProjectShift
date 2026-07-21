@@ -23,7 +23,7 @@ export function scoreMove(features, weights, random) {
 }
 
 export function createParametricAgent(profile) {
-    if (!profile?.id || !profile?.weights) throw new Error("Neplatný profil agenta.");
+    if (!profile?.id || !profile?.weights) throw new Error("Invalid agent profile.");
     return {
         id: profile.id,
         name: profile.name ?? profile.id,

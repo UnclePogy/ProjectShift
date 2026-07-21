@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
@@ -14,38 +14,38 @@
 
     <h1>Project Shift v0.5.0</h1>
 
-    <main class="game-shell" aria-label="Herní prototyp">
-        <section class="players-panel" aria-label="Hráči, skóre a příchozí kameny">
+    <main class="game-shell" aria-label="Game prototype">
+        <section class="players-panel" aria-label="Players, score, and incoming tiles">
             <article id="player-panel-0" class="player-panel">
                 <div class="player-panel__header">
-                    <span class="player-panel__name">Hráč 1</span>
-                    <span id="player-turn-0" class="player-panel__turn">NA TAHU</span>
+                    <span class="player-panel__name">Player 1</span>
+                    <span id="player-turn-0" class="player-panel__turn">TURN</span>
                 </div>
-                <div id="player-score-0" class="player-score" aria-label="Skóre hráče 1"></div>
-                <div id="player-queue-0" class="player-queue" aria-label="Další kameny hráče 1"></div>
+                <div id="player-score-0" class="player-score" aria-label="Player 1 score"></div>
+                <div id="player-queue-0" class="player-queue" aria-label="Player 1 upcoming tiles"></div>
             </article>
 
             <article id="player-panel-1" class="player-panel">
                 <div class="player-panel__header">
-                    <span class="player-panel__name">Hráč 2</span>
-                    <span id="player-turn-1" class="player-panel__turn">ČEKÁ</span>
+                    <span class="player-panel__name">Player 2</span>
+                    <span id="player-turn-1" class="player-panel__turn">WAITING</span>
                 </div>
-                <div id="player-score-1" class="player-score" aria-label="Skóre hráče 2"></div>
-                <div id="player-queue-1" class="player-queue" aria-label="Další kameny hráče 2"></div>
+                <div id="player-score-1" class="player-score" aria-label="Player 2 score"></div>
+                <div id="player-queue-1" class="player-queue" aria-label="Player 2 upcoming tiles"></div>
             </article>
         </section>
 
-        <section id="shared-queue-panel" class="shared-queue-panel" hidden aria-label="Společná fronta kamenů">
-            <span class="shared-queue-panel__label">SPOLEČNÁ FRONTA</span>
+        <section id="shared-queue-panel" class="shared-queue-panel" hidden aria-label="Shared tile queue">
+            <span class="shared-queue-panel__label">SHARED QUEUE</span>
             <div id="shared-queue" class="player-queue"></div>
         </section>
 
-        <div id="turn-banner" class="turn-banner" data-player="1" role="status" aria-live="polite">NA TAHU: HRÁČ 1</div>
+        <div id="turn-banner" class="turn-banner" data-player="1" role="status" aria-live="polite">PLAYER 1 TURN</div>
 
         <div id="winner-message" class="winner-message" role="status" aria-live="polite" hidden></div>
 
         <div class="board-row">
-            <div id="board" aria-label="Hrací deska. Tah začni na krajním kameni a táhni směrem dovnitř."></div>
+            <div id="board" aria-label="Game board. Start a move on an edge tile and drag inward."></div>
         </div>
     </main>
 

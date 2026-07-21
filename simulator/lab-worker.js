@@ -69,7 +69,7 @@ async function runLab(payload) {
   const registry = createAgentRegistry({ includePopulation: payload.agentSet === 'population20', perFamily: payload.perFamily ?? 4 });
   const agents = payload.agentIds.map((id) => {
     const agent = registry.get(id);
-    if (!agent) throw new Error(`Neznámý agent: ${id}`);
+    if (!agent) throw new Error(`Unknown agent: ${id}`);
     return agent;
   });
   const orders = buildOrders(agents, payload.includeMirrors);

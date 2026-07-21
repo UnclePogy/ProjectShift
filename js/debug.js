@@ -19,7 +19,7 @@ function resetBoard() {
     resetPlayerState();
     drawBoard();
     initInsertionControls();
-    console.log("Laboratoř: vytvořena nová deska a resetováni hráči");
+    console.log("Balance Lab: created a new board and reset the players");
 }
 
 function createLabField(labelText, control) {
@@ -72,7 +72,7 @@ function applyLaboratorySettings(controls) {
     setBoardConfiguration(settings);
     setInputConfiguration(settings);
     resetBoard();
-    console.log("Laboratoř: použito nastavení", settings);
+    console.log("Balance Lab: applied settings", settings);
 }
 
 function initDebugPanel() {
@@ -86,13 +86,13 @@ function initDebugPanel() {
 
     const title = document.createElement("h2");
     title.className = "debug-panel__title";
-    title.textContent = "LABORATOŘ";
+    title.textContent = "BALANCE LAB";
 
     const toggleButton = document.createElement("button");
     toggleButton.className = "debug-panel__toggle";
     toggleButton.type = "button";
     toggleButton.setAttribute("aria-expanded", "true");
-    toggleButton.textContent = "Skrýt";
+    toggleButton.textContent = "Hide";
 
     header.appendChild(title);
     header.appendChild(toggleButton);
@@ -134,17 +134,17 @@ function initDebugPanel() {
     const applyButton = document.createElement("button");
     applyButton.className = "debug-panel__button";
     applyButton.type = "button";
-    applyButton.textContent = "Použít a resetovat";
+    applyButton.textContent = "Apply & Reset";
 
     const defaultsButton = document.createElement("button");
     defaultsButton.className = "debug-panel__button";
     defaultsButton.type = "button";
-    defaultsButton.textContent = "Výchozí nastavení";
+    defaultsButton.textContent = "Default Settings";
 
     const newBoardButton = document.createElement("button");
     newBoardButton.className = "debug-panel__button";
     newBoardButton.type = "button";
-    newBoardButton.textContent = "Nová deska";
+    newBoardButton.textContent = "New Board";
 
     const controls = {
         boardSize,
@@ -193,18 +193,18 @@ function initDebugPanel() {
 
     newBoardButton.addEventListener("click", resetBoard);
 
-    content.appendChild(createLabField("Deska", boardSize));
-    content.appendChild(createLabField("Typy kamenů", symbolCount));
-    content.appendChild(createLabField("Fronta", queueSize));
-    content.appendChild(createLabField("Velikost fronty", queueTileScale));
-    content.appendChild(createLabField("Velikost symbolů", symbolScale));
-    content.appendChild(createLabField("Rozestup fronty", queueGap));
-    content.appendChild(createLabField("Počáteční body", startingScore));
-    content.appendChild(createLabField("Společná fronta", sharedQueueEnabled));
-    content.appendChild(createLabField("Animace (ms)", animationDuration));
-    content.appendChild(createLabField("Vkládání shora", topInsertionEnabled));
-    content.appendChild(createLabField("Vkládání odspodu", bottomInsertionEnabled));
-    content.appendChild(createLabField("Zobrazit skóre", scoreDisplayEnabled));
+    content.appendChild(createLabField("Board", boardSize));
+    content.appendChild(createLabField("Symbol Types", symbolCount));
+    content.appendChild(createLabField("Queue", queueSize));
+    content.appendChild(createLabField("Queue Size", queueTileScale));
+    content.appendChild(createLabField("Symbol Size", symbolScale));
+    content.appendChild(createLabField("Queue Spacing", queueGap));
+    content.appendChild(createLabField("Starting Score", startingScore));
+    content.appendChild(createLabField("Shared Queue", sharedQueueEnabled));
+    content.appendChild(createLabField("Animation (ms)", animationDuration));
+    content.appendChild(createLabField("Top Insertion", topInsertionEnabled));
+    content.appendChild(createLabField("Bottom Insertion", bottomInsertionEnabled));
+    content.appendChild(createLabField("Show Score", scoreDisplayEnabled));
     content.appendChild(applyButton);
     content.appendChild(defaultsButton);
     content.appendChild(newBoardButton);
@@ -212,7 +212,7 @@ function initDebugPanel() {
     const setCollapsed = (collapsed) => {
         panel.classList.toggle("debug-panel--collapsed", collapsed);
         toggleButton.setAttribute("aria-expanded", String(!collapsed));
-        toggleButton.textContent = collapsed ? "Otevřít" : "Skrýt";
+        toggleButton.textContent = collapsed ? "Open" : "Hide";
     };
 
     toggleButton.addEventListener("click", () => setCollapsed(!panel.classList.contains("debug-panel--collapsed")));

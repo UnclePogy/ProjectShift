@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project Shift – Simulátor</title>
+    <title>Project Shift – Simulator</title>
     <style>
         body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f4f4f4; color: #161616; }
         main { max-width: 1100px; margin: auto; }
@@ -19,29 +19,29 @@
 </head>
 <body>
 <main>
-    <h1>Project Shift – samostatný simulátor</h1>
-    <p class="note">Simulátor nevyužívá DOM, animace ani produkční stav hry. Výsledky jsou deterministické pro stejný seed.</p>
+    <h1>Project Shift – Standalone Simulator</h1>
+    <p class="note">The simulator does not use the DOM, animations, or the production game state. Results are deterministic for the same seed.</p>
     <form id="simulation-form">
-        <label>Počet her <input name="games" type="number" min="1" max="100000" value="1000"></label>
+        <label>Number of Games <input name="games" type="number" min="1" max="100000" value="1000"></label>
         <label>Seed <input name="seed" type="number" value="12345"></label>
-        <label>Hráč 1 <select name="player1"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
-        <label>Hráč 2 <select name="player2"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
-        <label>Velikost desky <input name="boardSize" type="number" min="3" max="10" value="5"></label>
-        <label>Typy kamenů <input name="symbolCount" type="number" min="3" max="30" value="10"></label>
-        <label>Délka fronty <input name="queueSize" type="number" min="1" max="10" value="2"></label>
-        <label>Počáteční body <input name="startingScore" type="number" min="1" max="30" value="7"></label>
-        <label>Max. tahů <input name="maxTurns" type="number" min="10" value="200"></label>
-        <label>Limit tahů bez bodu <input name="noScoreTurnLimit" type="number" min="5" value="50"></label>
-        <label class="check"><input name="sharedQueueEnabled" type="checkbox"> Společná fronta</label>
-        <label class="check"><input name="topInsertionEnabled" type="checkbox" checked> Vkládání shora</label>
-        <label class="check"><input name="bottomInsertionEnabled" type="checkbox"> Vkládání odspodu</label>
+        <label>Player 1 <select name="player1"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
+        <label>Player 2 <select name="player2"><option value="random">Random</option><option value="greedy">Greedy</option><option value="defensive">Defensive</option></select></label>
+        <label>Board Size <input name="boardSize" type="number" min="3" max="10" value="5"></label>
+        <label>Symbol Types <input name="symbolCount" type="number" min="3" max="30" value="10"></label>
+        <label>Queue Size <input name="queueSize" type="number" min="1" max="10" value="2"></label>
+        <label>Starting Score <input name="startingScore" type="number" min="1" max="30" value="7"></label>
+        <label>Maximum Turns <input name="maxTurns" type="number" min="10" value="200"></label>
+        <label>No-score Turn Limit <input name="noScoreTurnLimit" type="number" min="5" value="50"></label>
+        <label class="check"><input name="sharedQueueEnabled" type="checkbox"> Shared Queue</label>
+        <label class="check"><input name="topInsertionEnabled" type="checkbox" checked> Top Insertion</label>
+        <label class="check"><input name="bottomInsertionEnabled" type="checkbox"> Bottom Insertion</label>
         <div class="actions">
-            <button id="run-button" type="button">Spustit experiment</button>
-            <button id="compare-button" type="button">Porovnat 6–12 symbolů</button>
+            <button id="run-button" type="button">Run Experiment</button>
+            <button id="compare-button" type="button">Compare 6–12 Symbols</button>
         </div>
     </form>
-    <h2>Výsledek</h2>
-    <pre id="output">Zatím nebyl spuštěn žádný experiment.</pre>
+    <h2>Result</h2>
+    <pre id="output">No experiment has been run yet.</pre>
 </main>
 <script type="module" src="./runner.js"></script>
 </body>

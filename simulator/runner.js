@@ -32,7 +32,7 @@ function render(value) {
 }
 
 function runSafely(callback) {
-    output.textContent = "Probíhá výpočet…";
+    output.textContent = "Calculating…";
     requestAnimationFrame(() => {
         try {
             render(callback());

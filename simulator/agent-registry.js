@@ -12,6 +12,6 @@ export function createAgentRegistry({ includePopulation = false, perFamily = 4, 
 
 export function getRegisteredAgent(id, options = {}) {
     const agent = createAgentRegistry(options).get(id);
-    if (!agent) throw new Error(`Neznámý agent: ${id}`);
+    if (!agent) throw new Error(`Unknown agent: ${id}`);
     return agent;
 }

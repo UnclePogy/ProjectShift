@@ -21,7 +21,7 @@ export function runBatchFromSpec(specPath) {
     });
     const selectedAgents = spec.agentIds.map((id) => {
         const agent = registry.get(id);
-        if (!agent) throw new Error(`Agent ${id} není v registru.`);
+        if (!agent) throw new Error(`Agent ${id} is not in the registry.`);
         return agent;
     });
 

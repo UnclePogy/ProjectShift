@@ -99,7 +99,7 @@ function drawBoard() {
                 cell.style.backgroundColor = tileDefinition.color;
                 cell.style.color = tileDefinition.textColor;
                 cell.textContent = tileDefinition.symbol;
-                cell.setAttribute("aria-label", `Kámen ${tileValue + 1}`);
+                cell.setAttribute("aria-label", `Tile ${tileValue + 1}`);
             }
 
             board.appendChild(cell);

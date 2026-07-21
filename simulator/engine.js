@@ -202,7 +202,7 @@ function insertTile(board, move, tileValue) {
         for (let row = emptyRow; row < size - 1; row++) board[row][move.index] = board[row + 1][move.index];
         board[size - 1][move.index] = tileValue;
     } else {
-        throw new Error(`Neznámý směr tahu: ${move.direction}`);
+        throw new Error(`Unknown move direction: ${move.direction}`);
     }
 
     return ejectedTile;
@@ -221,7 +221,7 @@ export function applyMove(originalState, move, random = Math.random) {
     const legal = getLegalMoves(originalState).some(
         (candidate) => candidate.direction === move.direction && candidate.index === move.index
     );
-    if (!legal) throw new Error(`Nelegální tah: ${JSON.stringify(move)}`);
+    if (!legal) throw new Error(`Illegal move: ${JSON.stringify(move)}`);
 
     const state = cloneState(originalState);
     const incomingTile = consumeQueue(state, random);

@@ -48,6 +48,6 @@ export const agents = {
 
 export function getAgent(id) {
     const agent = agents[id];
-    if (!agent) throw new Error(`Neznámý agent: ${id}`);
+    if (!agent) throw new Error(`Unknown agent: ${id}`);
     return agent;
 }

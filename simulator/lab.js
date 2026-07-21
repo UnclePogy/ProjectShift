@@ -53,7 +53,7 @@ function selectedAgentIds() {
 
 function buildPayload() {
   const agentIds = selectedAgentIds();
-  if (agentIds.length < 2) throw new Error('Vyber alespoň dva agenty.');
+  if (agentIds.length < 2) throw new Error('Select at least two agents.');
   const matrix = {
     boardSizes: selectedValues('boardSizes', Number),
     symbolCounts: selectedValues('symbolCounts', Number),
@@ -69,7 +69,7 @@ function buildPayload() {
     }
   };
   for (const [key, values] of Object.entries(matrix)) {
-    if (key !== 'baseConfig' && values.length === 0) throw new Error(`Chybí volba: ${key}`);
+    if (key !== 'baseConfig' && values.length === 0) throw new Error(`Missing selection: ${key}`);
   }
   return {
     seed: Number($('#seed').value),
@@ -102,8 +102,8 @@ function estimate() {
     const n = payload.agentIds.length;
     const matchupOrders = payload.includeMirrors ? n * n : n * (n - 1);
     const games = configurations * matchupOrders * payload.gamesPerOrder;
-    $('#estimate').innerHTML = `<strong>${configurations.toLocaleString('cs-CZ')}</strong> konfigurací · <strong>${matchupOrders.toLocaleString('cs-CZ')}</strong> pořadí matchupů · <strong>${games.toLocaleString('cs-CZ')}</strong> partií`;
-    $('#warning').textContent = games > 250000 ? 'Velmi velký test. Začni raději rychlým režimem.' : games > 50000 ? 'Středně náročný test.' : 'Rozumný rozsah pro první spuštění.';
+    $('#estimate').innerHTML = `<strong>${configurations.toLocaleString('en-US')}</strong> configurations · <strong>${matchupOrders.toLocaleString('en-US')}</strong> matchup orders · <strong>${games.toLocaleString('en-US')}</strong> games`;
+    $('#warning').textContent = games > 250000 ? 'Very large test. Start with Quick Check instead.' : games > 50000 ? 'Moderately demanding test.' : 'Reasonable scope for a first run.';
     $('#warning').className = games > 250000 ? 'warning danger' : games > 50000 ? 'warning caution' : 'warning ok';
     return games;
   } catch (error) {
@@ -152,7 +152,7 @@ function setRunningState(isRunning) {
 function startRun() {
   const payload = buildPayload();
   const estimatedGames = estimate();
-  if (estimatedGames > 250000 && !confirm(`Test obsahuje ${estimatedGames.toLocaleString('cs-CZ')} partií. Opravdu ho spustit?`)) return;
+  if (estimatedGames > 250000 && !confirm(`This test contains ${estimatedGames.toLocaleString('en-US')} games. Run it anyway?`)) return;
   latestResults = [];
   renderResults([]);
   worker?.terminate();
@@ -162,26 +162,26 @@ function startRun() {
   worker.onerror = (event) => {
     event.preventDefault();
     const details = [
-      event.message || 'Worker se nepodařilo načíst.',
-      event.filename ? `Soubor: ${event.filename}` : '',
-      event.lineno ? `Řádek: ${event.lineno}` : ''
+      event.message || 'The worker could not be loaded.',
+      event.filename ? `File: ${event.filename}` : '',
+      event.lineno ? `Line: ${event.lineno}` : ''
     ].filter(Boolean).join('\n');
     showError(details);
   };
-  worker.onmessageerror = () => showError('Prohlížeč nedokázal přečíst zprávu ze simulátoru.');
+  worker.onmessageerror = () => showError('The browser could not read the simulator message.');
   setRunningState(true);
-  $('#status').textContent = 'Spouštím…';
+  $('#status').textContent = 'Starting…';
   $('#progress').value = 0;
   worker.postMessage({ type: 'start', payload });
 }
 
 function handleWorkerMessage(event) {
   const message = event.data;
-  if (message.type === 'started') $('#status').textContent = `Běží ${message.totals.games.toLocaleString('cs-CZ')} partií`;
+  if (message.type === 'started') $('#status').textContent = `Running ${message.totals.games.toLocaleString('en-US')} games`;
   if (message.type === 'progress') {
     const percent = message.totalGames ? (message.completedGames / message.totalGames) * 100 : 0;
     $('#progress').value = percent;
-    $('#progressText').textContent = `${percent.toFixed(1)} % · konfigurace ${message.configIndex}/${message.totalConfigurations} · ${message.currentMatchup}`;
+    $('#progressText').textContent = `${percent.toFixed(1)} % · configuration ${message.configIndex}/${message.totalConfigurations} · ${message.currentMatchup}`;
   }
   if (message.type === 'configurationComplete') {
     latestResults.push(message.result);
@@ -190,15 +190,15 @@ function handleWorkerMessage(event) {
   }
   if (message.type === 'complete' || message.type === 'stopped') {
     setRunningState(false);
-    $('#status').textContent = message.type === 'complete' ? 'Test dokončen' : 'Test zastaven';
-    $('#progressText').textContent = `${message.completedGames.toLocaleString('cs-CZ')} odehraných partií`;
+    $('#status').textContent = message.type === 'complete' ? 'Test complete' : 'Test stopped';
+    $('#progressText').textContent = `${message.completedGames.toLocaleString('en-US')} games played`;
   }
   if (message.type === 'error') showError(message.message);
 }
 
 function showError(message) {
   setRunningState(false);
-  $('#status').textContent = 'Chyba';
+  $('#status').textContent = 'Error';
   alert(message);
 }
 
@@ -224,20 +224,20 @@ function aggregateConfig(result) {
 }
 
 const FILTER_LABELS = {
-  too_many_unresolved_games: 'moc nedokončených her',
-  games_too_long: 'příliš dlouhé partie',
-  first_player_imbalance: 'nerovnováha začínajícího hráče',
-  no_resolved_games: 'žádná dokončená hra'
+  too_many_unresolved_games: 'too many unresolved games',
+  games_too_long: 'games are too long',
+  first_player_imbalance: 'first-player imbalance',
+  no_resolved_games: 'no resolved games'
 };
 
 function formatFilter(result) {
-  if (result.screening.passed) return '<span class="badge pass">prošlo</span>';
+  if (result.screening.passed) return '<span class="badge pass">passed</span>';
   const reasons = result.screening.reasons.map((reason) => FILTER_LABELS[reason] ?? reason);
-  return `<span class="badge fail">neprošlo</span><div class="filter-reasons">${reasons.join('<br>')}</div>`;
+  return `<span class="badge fail">failed</span><div class="filter-reasons">${reasons.join('<br>')}</div>`;
 }
 
 function describeConfig(config) {
-  return `${config.boardSize}×${config.boardSize} · ${config.symbolCount} kamenů · fronta ${config.queueSize} · ${config.sharedQueueEnabled ? 'společná' : 'oddělená'}`;
+  return `${config.boardSize}×${config.boardSize} · ${config.symbolCount} symbols · queue ${config.queueSize} · ${config.sharedQueueEnabled ? 'shared' : 'separate'}`;
 }
 
 function rankedResults(results) {
@@ -270,11 +270,11 @@ function renderRecommendation(ranked) {
   const score = best.balanceScore;
   $('#bestConfig').textContent = describeConfig(best.result.config);
   $('#bestScore').textContent = score.total.toFixed(1);
-  $('#bestDetails').innerHTML = `Nedokončeno <strong>${(best.aggregate.unresolved * 100).toFixed(1)} %</strong> · průměr <strong>${best.aggregate.turns.toFixed(1)} tahů</strong> · P1 <strong>${best.aggregate.p1 === null ? '—' : `${(best.aggregate.p1 * 100).toFixed(1)} %`}</strong>`;
+  $('#bestDetails').innerHTML = `Unresolved <strong>${(best.aggregate.unresolved * 100).toFixed(1)} %</strong> · average <strong>${best.aggregate.turns.toFixed(1)} turns</strong> · P1 <strong>${best.aggregate.p1 === null ? '—' : `${(best.aggregate.p1 * 100).toFixed(1)} %`}</strong>`;
   $('#bestLead').textContent = second
-    ? `Náskok před druhým místem: ${lead.toFixed(1)} bodu.`
-    : 'Pro srovnání spusť alespoň dvě konfigurace.';
-  $('#scoreBreakdown').textContent = `Dílčí skóre: dokončení ${score.unresolvedScore.toFixed(1)} · délka ${score.lengthScore.toFixed(1)} · férovost ${score.fairnessScore.toFixed(1)}`;
+    ? `Lead over second place: ${lead.toFixed(1)} points.`
+    : 'Run at least two configurations for comparison.';
+  $('#scoreBreakdown').textContent = `Component scores: completion ${score.unresolvedScore.toFixed(1)} · length ${score.lengthScore.toFixed(1)} · fairness ${score.fairnessScore.toFixed(1)}`;
 }
 
 function renderResults(results) {
@@ -288,14 +288,14 @@ function renderResults(results) {
     row.innerHTML = `
       <td><strong>${index + 1}.</strong></td><td><strong>${balanceScore.total.toFixed(1)}</strong></td>
       <td>${c.boardSize}×${c.boardSize}</td><td>${c.symbolCount}</td><td>${c.queueSize}</td>
-      <td>${c.sharedQueueEnabled ? 'společná' : 'oddělená'}</td><td>${c.bottomInsertionEnabled ? 'ano' : 'ne'}</td>
+      <td>${c.sharedQueueEnabled ? 'shared' : 'separate'}</td><td>${c.bottomInsertionEnabled ? 'yes' : 'no'}</td>
       <td>${(a.unresolved * 100).toFixed(1)} %</td><td>${a.turns.toFixed(1)}</td><td>${a.cascades.toFixed(2)}</td>
       <td>${a.p1 === null ? '—' : `${(a.p1 * 100).toFixed(1)} %`}</td><td>${(a.scoring * 100).toFixed(1)} %</td>
       <td>${formatFilter(result)}</td>`;
     body.appendChild(row);
   });
   renderRecommendation(ranked);
-  $('#resultCount').textContent = `${results.length} dokončených konfigurací`;
+  $('#resultCount').textContent = `${results.length} completed configurations`;
   $('#exportJson').disabled = !results.length;
   $('#exportCsv').disabled = !results.length;
 }
@@ -310,7 +310,7 @@ function restoreCheckpoint() {
     if (stored?.results?.length) {
       latestResults = stored.results;
       renderResults(latestResults);
-      $('#status').textContent = `Načten poslední výsledek (${latestResults.length} konfigurací)`;
+      $('#status').textContent = `Loaded latest result (${latestResults.length} configurations)`;
     }
   } catch { /* ignore invalid local data */ }
 }
@@ -359,8 +359,8 @@ $('#pauseBtn').addEventListener('click', () => {
   const pausedNow = $('#pauseBtn').dataset.paused === 'true';
   worker?.postMessage({ type: pausedNow ? 'resume' : 'pause' });
   $('#pauseBtn').dataset.paused = String(!pausedNow);
-  $('#pauseBtn').textContent = pausedNow ? 'Pozastavit' : 'Pokračovat';
-  $('#status').textContent = pausedNow ? 'Test pokračuje' : 'Test pozastaven';
+  $('#pauseBtn').textContent = pausedNow ? 'Pause' : 'Resume';
+  $('#status').textContent = pausedNow ? 'Test running' : 'Test paused';
 });
 $('#stopBtn').addEventListener('click', () => worker?.postMessage({ type: 'stop' }));
 $('#exportJson').addEventListener('click', () => download('project-shift-balance-lab.json', JSON.stringify(latestResults, null, 2), 'application/json'));

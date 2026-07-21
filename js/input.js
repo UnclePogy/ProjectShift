@@ -116,7 +116,7 @@ function createQueueTile(tileValue, index) {
     tile.style.backgroundColor = tileDefinition.color;
     tile.style.color = tileDefinition.textColor;
     tile.textContent = tileDefinition.symbol;
-    tile.setAttribute("aria-label", `Kámen ${tileValue + 1}`);
+    tile.setAttribute("aria-label", `Tile ${tileValue + 1}`);
 
     if (index === 0) tile.classList.add("player-queue__tile--current");
     return tile;
@@ -135,7 +135,7 @@ function updateScoreDisplays() {
         if (!scoreElement) return;
 
         scoreElement.innerHTML = "";
-        scoreElement.setAttribute("aria-label", `Hráč ${playerIndex + 1} má ${score} ikon`);
+        scoreElement.setAttribute("aria-label", `Player ${playerIndex + 1} has ${score} tokens`);
         for (let index = 0; index < score; index++) scoreElement.appendChild(createScoreToken());
     });
 
@@ -156,7 +156,7 @@ function updatePlayerDisplays() {
         const isActive = playerIndex === activePlayerIndex && !gameOver;
 
         panel?.classList.toggle("player-panel--active", isActive);
-        if (turnElement) turnElement.textContent = gameOver ? "KONEC" : isActive ? "NA TAHU" : "ČEKÁ";
+        if (turnElement) turnElement.textContent = gameOver ? "GAME OVER" : isActive ? "TURN" : "WAITING";
         if (!queueElement) return;
 
         queueElement.hidden = SHARED_QUEUE_ENABLED;
@@ -174,7 +174,7 @@ function updatePlayerDisplays() {
 
     const turnBanner = document.getElementById("turn-banner");
     if (turnBanner) {
-        turnBanner.textContent = gameOver ? "HRA SKONČILA" : `NA TAHU: HRÁČ ${activePlayerIndex + 1}`;
+        turnBanner.textContent = gameOver ? "GAME OVER" : `PLAYER ${activePlayerIndex + 1} TURN`;
         turnBanner.dataset.player = String(activePlayerIndex + 1);
     }
 
@@ -201,7 +201,7 @@ function transferScoreToActivePlayer(amount) {
 function showWinnerMessage(playerIndex) {
     const message = document.getElementById("winner-message");
     if (!message) return;
-    message.textContent = `Hráč ${playerIndex + 1} vyhrál`;
+    message.textContent = `Player ${playerIndex + 1} wins`;
     message.hidden = false;
 }
 
